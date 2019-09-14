@@ -1,0 +1,19 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body">
+            <%- include nav.ejs %>
+            <h1 class="text-center mb-3">Profile</h1>
+            <% include ./partials/messages %>
+            <img src="/images/foamy.jpg" alt="Foamy the Squirrel">
+            <div>
+                <p><%= user.firstName %> <%= user.lastName %></p>
+                <p><%= user.userType %></p>
+                <p><%= user.email %></p>
+            </div>
+            <a href="/addUserPhoto" class="btn btn-primary">Add Photo</a>
+            <a href="/editPersonalDetails" class="btn btn-primary">Edit Details</a>
+            <a href="/users/logout" class="btn btn-secondary">Logout</a>
+        </div>
+        <%- include footer.ejs %>
+    </div>
+</div>

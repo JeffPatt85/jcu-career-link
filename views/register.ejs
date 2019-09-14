@@ -2,49 +2,58 @@
     <div class="col-md-6 m-auto">
         <div class="card card-body">
             <h1 class="text-center mb-3"><img src="/images/jcuLogo.png" alt="The JCU logo"></h1>
-            <h2 class="text-center mb-3"><i class="fas fa-user-plus"></i> Register</h2>
+            <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i> Register</h1>
             <% include ./partials/messages %>
-                <form action="/users/register" method="POST">
-                    <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input type="firstName" id="firstName" name="firstName" class="form-control" placeholder="Enter First Name" value="<%= typeof firstName != 'undefined' ? firstName : '' %>" />
+            <form action="/users/register" method="POST">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" class="form-control"
+                           placeholder="Enter First Name"
+                           value="<%= typeof firstName != 'undefined' ? firstName : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Enter Last Name"
+                           value="<%= typeof lastName != 'undefined' ? lastName : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email"
+                           value="<%= typeof email != 'undefined' ? email : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter Phone"
+                           value="<%= typeof phone != 'undefined' ? phone : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <div class="centre-radio-buttons">
+                        <p>Please select your role in the community</p>
+                        <input type="radio" id="employer" name="userType" value="employer">
+                        <label for="employer">Employer</label>
+                        <input type="radio" id="lecturer" name="userType" value="lecturer">
+                        <label for="lecturer">Lecturer</label>
+                        <input type="radio" id="student" name="userType" value="student">
+                        <label for="student">Student</label>
                     </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input type="lastName" id="lastName" name="lastName" class="form-control" placeholder="Enter Last Name" value="<%= typeof lastName != 'undefined' ? lastName : '' %>" />
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email" value="<%= typeof email != 'undefined' ? email : '' %>" />
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter Phone" value="<%= typeof phone != 'undefined' ? phone : '' %>" />
-                    </div>
-                    <div class="form-group">
-                        <div class="centre-radio-buttons">
-                            <p>Please select your role in the community</p>
-                            <input type="radio" id="employer" name="userType" value="employer">
-                            <label for="employer">Employer</label>
-                            <input type="radio" id="lecturer" name="userType" value="lecturer">
-                            <label for="lecturer">Lecturer</label>
-                            <input type="radio" id="student" name="userType" value="student">
-                            <label for="student">Student</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" class="form-control" placeholder="Create Password" value="<%= typeof password != 'undefined' ? password : '' %>" />
-                    </div>
-                    <div class="form-group">
-                        <label for="password2">Confirm Password</label>
-                        <input type="password" id="password2" name="password2" class="form-control" placeholder="Confirm Password" value="<%= typeof password2 != 'undefined' ? password2 : '' %>" />
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control"
+                           placeholder="Create Password" value="<%= typeof password != 'undefined' ? password : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" id="password2" name="password2" class="form-control"
+                           placeholder="Confirm Password"
+                           value="<%= typeof password2 != 'undefined' ? password2 : '' %>"/>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
                     Register
                 </button>
-                </form>
-                <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
+            </form>
+            <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
         </div>
+        <%- include footer.ejs %>
     </div>
 </div>

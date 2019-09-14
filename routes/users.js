@@ -8,6 +8,7 @@ const User = require('../models/user');
 
 // Set Auth path
 const {
+    ensureAuthenticated,
     forwardAuthenticated
 } = require('../config/auth');
 
@@ -46,7 +47,7 @@ router.post('/register', (req, res) => {
     }
 
     // Check passwords match
-    if (password != password2) {
+    if (password !== password2) {
         errors.push({
             msg: 'Passwords entered do not match'
         });
@@ -76,8 +77,8 @@ router.post('/register', (req, res) => {
         // Validation passed
 
         User.findOne({
-                email: email
-            })
+            email: email
+        })
             .then(user => {
                 if (user) {
                     // User with the provided email address already exists in database
@@ -148,3 +149,4 @@ router.get('/logout', (req, res) => {
 });
 
 module.exports = router;
+

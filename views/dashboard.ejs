@@ -1,5 +1,14 @@
-<h1 class="mt-4">Dashboard</h1>
-<p class="lead mb-3">Welcome
-    <%= user.name %>
-</p>
-<a href="/users/logout" class="btn btn-secondary">Logout</a>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body">
+            <%- include nav.ejs %>
+            <h1 class="text-center mb-3">Dashboard</h1>
+            <% include ./partials/messages %>
+            <p class="lead mb-3">Welcome <%= user.firstName %></p>
+            <p><a href="/profile" class="btn btn-primary">Profile</a></p>
+            <p><a href="/test" class="btn btn-primary">Test</a></p>
+            <p><a href="/users/logout" class="btn btn-secondary">Logout</a></p>
+        </div>
+        <%- include footer.ejs %>
+    </div>
+</div>

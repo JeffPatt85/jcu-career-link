@@ -1,0 +1,30 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body">
+            <%- include nav.ejs %>
+            <h1 class="text-center mb-3">Resume Upload</h1>
+            <% include ./partials/messages %>
+            <p>Here you can upload the latest copy of your resume, which can be viewed by other <i>JCU Career Link</i>
+                users.</p>
+            <p>Please ensure your resume is in a commonly acceptable format before attempting to upload. Accepted
+                formats include:</p>
+            <ul>
+                <li>.doc</li>
+                <li>.docx</li>
+                <li>.rtf</li>
+                <li>.odt</li>
+                <li>.ott</li>
+                <li>.pdf</li>
+            </ul>
+            <form action="/resume" method="POST">
+                <div class="form-group">
+                    <label for="resume">Resume</label>
+                    <input type="file" accept=".doc, .docx, .rtf, .odt, .ott, .pdf" id="resume" name="resume"
+                           class="form-control" placeholder="Select file to upload"/>
+                </div>
+            </form>
+            <a href="/users/logout" class="btn btn-secondary">Logout</a>
+        </div>
+        <%- include footer.ejs %>
+    </div>
+</div>
