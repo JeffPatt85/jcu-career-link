@@ -1,4 +1,5 @@
 const express = require('express');
+const formidable = require('formidable');
 const router = express.Router();
 const {
     ensureAuthenticated,
@@ -48,9 +49,36 @@ router.get('/messages', ensureAuthenticated, (req, res) => {
     })
 });
 
-// Handle Resume POST
+// Resume Upload Page
+router.get('/resume', ensureAuthenticated, (req, res) => {
+    console.log('Request made to open resume page');
+    res.render('resume', {
+        user: req.user
+    })
+});
+
+// Handle Resume Upload POST
 router.post('/resume', (req, res, next) => {
     console.log('Request made to handle a resume POST');
+    let form = new formidable.IncomingForm();
+
+    form.parse(req);
+
+    form.on('fileBegin', function (name, file){
+        file.path = 'data/uploads/resumes/' + file.name;
+    });
+
+    form.on('file', function (name, file){
+        console.log('Uploaded ' + file.name);
+    });
+
+    req.flash(
+        'success_msg',
+        'Resume uploaded successfully'
+    );
+
+    res.redirect('/resume');
+
 });
 
 module.exports = router;
