@@ -7,8 +7,13 @@ const {
 } = require('../config/auth');
 console.log("You reached the notification manager");
 router.get('/trigger', ensureAuthenticated, (req , res) => {
-    notifier.notify('You have a new message');
-    console.log("You reached the notification manager trigger");
+    notifier.notify({
+        title : 'JCU Career Link' ,
+        message: 'You have received a new message' ,
+        wait : true
+    });
+
+
     res.redirect('/messages')
 });
 module.exports = router ;
