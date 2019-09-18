@@ -15,6 +15,7 @@ development machine isn't necessary.
     * passport-local
     * ejs
     * express-ejs-layouts
+    * node-notifier
 
 
 ## Deploying on localhost

@@ -1,13 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    table{
+
+    }
+    td,th{
+        border : 1px solid #dddddd;
+        text-align: left;
+        font-size: 10px;
+        padding: 8px;
+    }
+    tr:nth-child(even){
+        background-color: aliceblue;
+    }
+</style>
+<body>
 <div class="row mt-5">
-    <div class="col-md-9 m-auto">
+    <div class="col-md-6 m-auto">
         <div class="card card-body">
             <%- include nav.ejs %>
             <h1 class="text-center mb-3">Messages</h1>
             <% include ./partials/messages %>
-            <p>Pommy ipsum nigh because there was nothing on the gogglebox got a lot of brass up at the crack of dawn treacle what a mug, flog a dead horse trouble and strife what a load of cobblers a right toff odds and sods guinness. Working class had a barney with the inlaws mush on his bill whizz golly, scatterbrained munta doing my nut in a right royal knees up. Full English breakast blummin' rubbish one would like nuthouse old girl knee high to a grasshopper i'll be a monkey's uncle by 'eck love, ask your mother if off t'pub pillock jolly good conked him one on the nose a right royal knees up chaps, 221B Baker Street black pudding off the hook conkers slappers they can sod off. </p>
-
-            <p>Pikey a cracking taking the mick bit of a div, jellied eels. </p>
+            <p>
+                <h1>Your messages</h1>
+            <table>
+                <tr>
+                    <th>From</th>
+                    <th>Date</th>
+                    <th>Message</th>
+                </tr>
+                <tr>
+                    <th>Bilbo Baggins</th>
+                    <th>A long time ago</th>
+                    <th>Hey Gandalf, just sending this to let you know that I've found a ring</th>
+                </tr>
+            </table>
+            </p>
+            <p>
+                <h1>Send a message</h1>
+            <form action="/messageManager/sendMessage" method="post">
+            Recipient : <input type="text" name="recipient" value="">
+            <br>
+            Message : <input type="text" name="content" value ="">
+                <br>
+                <button>Send message</button>
+            </form>
+            </p>
+            <form action="/notificationManager/trigger" method="get">
+            <button>Get a notification</button>
+            </form>
+            <a href="/users/logout" class="btn btn-secondary">Logout</a>
         </div>
         <%- include footer.ejs %>
     </div>
 </div>
+</body>
+</html>
