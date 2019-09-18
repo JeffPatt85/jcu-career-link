@@ -8,17 +8,13 @@ const User = require('../models/user');
 
 // Set Auth path
 const {
-    ensureAuthenticated,
     forwardAuthenticated
 } = require('../config/auth');
 
-// Login Page
-router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
-
-// Register Page
+// Register page
 router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
 
-// Register handle - process user registration attempt
+// Register request handle
 router.post('/register', (req, res) => {
     const {
         firstName,
@@ -132,7 +128,10 @@ router.post('/register', (req, res) => {
     }
 });
 
-// Login
+// Login page
+router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
+
+// Login request handle
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: '/dashboard',
@@ -141,7 +140,7 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-// Logout
+// Logout request handle
 router.get('/logout', (req, res) => {
     req.logout();
     req.flash('success_msg', 'You are logged out');

@@ -1,0 +1,77 @@
+<div class="row mt-5">
+    <div class="col-md-9 m-auto">
+        <div class="card card-body">
+            <%- include nav.ejs %>
+            <h1 class="text-center mb-3">Create new job advertisement</h1>
+            <% include ./partials/messages %>
+            <form action="/users/" method="POST">
+                <div class="form-group">
+                    <label for="businessName">Business Name</label>
+                    <input type="text" id="businessName" name="businessName" class="form-control"
+                           placeholder="Enter Business Name"
+                           value="<%= typeof businessName != 'undefined' ? businessName : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="businessPhone">Business Phone</label>
+                    <input type="tel" id="businessPhone" name="businessPhone" class="form-control"
+                           placeholder="Enter Business Phone"
+                           value="<%= typeof businessPhone != 'undefined' ? businessPhone : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="businessEmail">Business Email</label>
+                    <input type="email" id="businessEmail" name="businessEmail" class="form-control"
+                           placeholder="Enter Business Email"
+                           value="<%= typeof businessEmail != 'undefined' ? businessEmail : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="jobTitle">Job Title</label>
+                    <input type="text" id="jobTitle" name="jobTitle" class="form-control" placeholder="Enter Job Title"
+                           value="<%= typeof jobTitle != 'undefined' ? jobTitle : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="jobDescription">Job Description</label>
+                    <input type="text" id="jobDescription" name="jobDescription" class="form-control"
+                           placeholder="Enter Job Description"
+                           value="<%= typeof jobDescription != 'undefined' ? jobDescription : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="jobType">Job Type</label>
+                    <input type="text" id="jobType" name="jobType" class="form-control" placeholder="Enter Job Type"
+                           value="<%= typeof jobType != 'undefined' ? jobType : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="jobAddress">Job Address</label>
+                    <input type="text" id="jobAddress" name="jobAddress" class="form-control"
+                           placeholder="Enter Job Address"
+                           value="<%= typeof jobAddress != 'undefined' ? jobAddress : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="jobCity">Job City</label>
+                    <input type="text" id="jobCity" name="jobCity" class="form-control" placeholder="Enter Job City"
+                           value="<%= typeof jobCity != 'undefined' ? jobCity : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="jobState">Job State</label>
+                    <input type="text" id="jobState" name="jobState" class="form-control" placeholder="Enter Job State"
+                           value="<%= typeof jobState != 'undefined' ? jobState : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="jobCountry">Job Country</label>
+                    <input type="text" id="jobCountry" name="jobCountry" class="form-control"
+                           placeholder="Enter Job Country"
+                           value="<%= typeof jobCountry != 'undefined' ? jobCountry : '' %>"/>
+                </div>
+                <div class="form-group">
+                    <label for="remuneration">Remuneration Details</label>
+                    <input type="text" id="remuneration" name="remuneration" class="form-control"
+                           placeholder="Enter remuneration details"
+                           value="<%= typeof remuneration != 'undefined' ? remuneration : '' %>"/>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    Register
+                </button>
+            </form>
+        </div>
+        <%- include footer.ejs %>
+    </div>
+</div>

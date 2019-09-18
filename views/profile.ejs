@@ -1,22 +1,31 @@
 <div class="row mt-5">
-    <div class="col-md-6 m-auto">
+    <div class="col-md-9 m-auto">
         <div class="card card-body">
             <%- include nav.ejs %>
             <h1 class="text-center mb-3">Profile</h1>
             <% include ./partials/messages %>
-            <img src="/images/foamy.jpg" alt="Foamy the Squirrel">
-            <div>
-                <p><%= user.firstName %> <%= user.lastName %></p>
-                <p><%= user.userType %></p>
-                <p><%= user.email %></p>
+            <div class="row">
+                <div class="text-center col-md-6">
+                    <img src="/images/foamy.jpg" alt="Foamy the Squirrel">
+                </div>
+                <div class="col-md-6">
+                    <p><b>Name: </b><%= user.firstName %> <%= user.lastName %></p>
+                    <p><b>User Type: </b><%= user.userType %></p>
+                    <p><b>Email: </b><%= user.email %></p>
+                    <p><b>Phone: </b><%= user.phone %></p>
+                </div>
             </div>
-            <div>
-                <p>Some description field that we should fill out if we want to be anything like the big guns.</p>
+            <div class="row">
+                <div class="col-md-12">
+                <p><b>Summary</b></p>
+            </div>
+                <div class="col-md-12">
+                    <p>Some description field that we should fill out if we want to be anything like the big guns.</p>
+                </div>
             </div>
             <a href="/addUserPhoto" class="btn btn-primary">Add Photo</a>
             <a href="/resume" class="btn btn-primary">Add Resume</a>
-            <a href="/editPersonalDetails" class="btn btn-primary">Edit Details</a>
-            <a href="/users/logout" class="btn btn-secondary">Logout</a>
+            <a href="/editPersonalDetails" class="btn btn-primary">Edit Details <i class="fas fa-edit"></i></a>
         </div>
         <%- include footer.ejs %>
     </div>

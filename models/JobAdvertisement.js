@@ -41,6 +41,14 @@ const JobAdvertisementSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    remuneration: {
+        type: String,
+        required: false
+    },
+    isCurrent: {
+        type: String,
+        required: true
+    },
     postedByUserID: {
         type: String,
         required: true

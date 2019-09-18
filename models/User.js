@@ -25,6 +25,18 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    personalSummary: {
+        type: String,
+        required: false
+    },
+    skills: {
+        type: String,
+        required: false
+    },
+    experience: {
+        type: String,
+        required: false
+    },
     date: {
         type: Date,
         default: Date.now

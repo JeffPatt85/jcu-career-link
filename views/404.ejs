@@ -1,0 +1,23 @@
+<div class="row mt-5">
+    <div class="col-md-9 m-auto">
+        <div class="card card-body">
+            <%- include nav.ejs %>
+            <h1 class="text-center mb-3">404 - Page not found</h1>
+            <% include ./partials/messages %>
+            <div class="row">
+                <div class="text-center col-md-12">
+                    <img class="img-fluid" src="/images/techMonkey.jpg" alt="The Tech Monkeys">
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-center col-md-12">
+                    <p>It seems you managed to find a dud link! We'll get our team of monkeys to look into this issue,
+                        but in the meantime we suggest going back to one of these pages.</p>
+                    <p><a href="/users/logout">Logout</a></p>
+                </div>
+            </div>
+            <a href="/users/logout" class="btn btn-secondary">Logout</a>
+        </div>
+        <%- include footer.ejs %>
+    </div>
+</div>

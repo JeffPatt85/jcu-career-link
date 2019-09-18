@@ -16,6 +16,9 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 // Set up access rights for public folder
 app.use(express.static('public'));
 
+// Set up access rights for css folder
+app.use(express.static('css'));
+
 // Set up access rights for data folder
 app.use(express.static('data'));
 
