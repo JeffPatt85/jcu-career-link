@@ -71,6 +71,5 @@ app.use(function(req, res, next) {
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/notificationManager', require('./routes/notificationManager'));
-app.use('onClickManager', require('./public/scripts/onClickManager'));
 // Establish server and listener
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
