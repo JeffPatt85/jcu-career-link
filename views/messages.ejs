@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <style>
-    table{
+    table {
 
     }
-    td,th{
-        border : 1px solid #dddddd;
+
+    td, th {
+        border: 1px solid #dddddd;
         text-align: left;
         font-size: 10px;
         padding: 8px;
     }
-    tr:nth-child(even){
+
+    tr:nth-child(even) {
         background-color: aliceblue;
     }
 </style>
 <body>
 <div class="row mt-5">
-    <div class="col-md-6 m-auto">
+    <div class="col-md-9 m-auto">
         <div class="card card-body">
             <%- include nav.ejs %>
             <h1 class="text-center mb-3">Messages</h1>
             <% include ./partials/messages %>
             <p>
-                <h1>Your messages</h1>
+            <h1>Your messages</h1>
             <table>
                 <tr>
                     <th>From</th>
@@ -39,19 +41,19 @@
             </table>
             </p>
             <p>
-                <h1>Send a message</h1>
+            <h1>Send a message</h1>
             <form action="/messageManager/sendMessage" method="post">
-            Recipient : <input type="text" name="recipient" value="">
-            <br>
-            Message : <input type="text" name="content" value ="">
+                Recipient : <input type="text" name="recipient" value="">
+                <br>
+                Message : <input type="text" name="content" value="">
                 <br>
                 <button>Send message</button>
             </form>
             </p>
             <form action="/notificationManager/trigger" method="get">
-            <button>Get a notification</button>
+                <button>Get a notification</button>
             </form>
-        </div>
+        </div> <!-- End card-body -->
         <%- include footer.ejs %>
     </div>
 </div>

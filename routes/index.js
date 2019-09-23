@@ -7,13 +7,15 @@ const {
 } = require('../config/auth');
 
 
+const User = require('../models/user');
+const JobAdvertisement = require('../models/jobAdvertisement');
 
 
+// Welcome - serve page
+router.get('/', forwardAuthenticated, (req, res) =>
+    res.render('welcome'));
 
-// Welcome page
-router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
-
-// Dashboard page
+// Dashboard - serve page
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
     console.log('Request made to open profile page');
     res.render('dashboard', {
@@ -21,7 +23,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
     })
 });
 
-// Profile page
+// Profile - serve page
 router.get('/profile', ensureAuthenticated, (req, res) => {
     console.log('Request made to open profile page');
     res.render('profile', {
@@ -29,7 +31,15 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
     })
 });
 
-// Job advertisement creation page
+// Bookmark Job - handle bookmark request
+router.post('/bookmarkJob', ensureAuthenticated, function (req, res) {
+    let jobId = req.query.jobId;
+    let userId = req.user._Id;
+
+    console.log('Request made to by user ' + userId + 'to bookmark job ad ' + jobId);
+});
+
+// Create Job - serve page
 router.get('/createJob', ensureAuthenticated, (req, res) => {
     console.log('Request made to open job ad creation page');
     res.render('createJob', {
@@ -37,137 +47,251 @@ router.get('/createJob', ensureAuthenticated, (req, res) => {
     })
 });
 
-// Job advertisement creation page
-router.post('/register', (req, res) => {
+// Create Job - handle job creation request
+router.post('/createJob', ensureAuthenticated, (req, res) => {
+    console.log(`Request to create new job ad initiated.`);
+
     const {
-        firstName,
-        lastName,
-        email,
-        userType,
-        phone,
-        password,
-        password2
+        businessName,
+        businessPhone,
+        businessEmail,
+        jobTitle,
+        jobDescription,
+        jobType,
+        jobAddress,
+        jobCity,
+        jobState,
+        jobCountry,
+        remuneration,
+        isCurrent,
+        postedByUserID,
+        postDate
     } = req.body;
 
     let errors = [];
 
-    function checkPassword(str) {
-        // Password should contain at least eight characters long,
-        // contain at least one number, one lowercase and one uppercase letter
-        var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-        return re.test(str);
-    }
-
     // Check required fields
-    if (!firstName || !lastName || !email || !phone || !userType || !password || !password2) {
+    if (!businessName || !businessPhone || !businessEmail || !jobTitle || !jobDescription || !jobType || !jobAddress
+        || !jobCity || !jobState || !jobCountry) {
         errors.push({
             msg: 'Please fill in all fields'
         });
     }
 
-    // Check passwords match
-    if (password !== password2) {
-        errors.push({
-            msg: 'Passwords entered do not match'
+    // If any errors are present we re-render the screen with the user inputs in place, otherwise
+    // begin database procedure
+    if (errors.length > 0) {
+        res.render('createJob', {
+            errors,
+            businessName,
+            businessPhone,
+            businessEmail,
+            jobTitle,
+            jobDescription,
+            jobType,
+            jobAddress,
+            jobCity,
+            jobState,
+            jobCountry,
+            remuneration,
+            isCurrent,
+            postedByUserID,
+            postDate
         });
-    }
-
-    // Check the password provided meets the standard needs
-    if (!checkPassword(password)) {
-        errors.push({
-            msg: 'Password should be at least eight characters in length, contain at least one number, one lowercase and one uppercase letter'
+    } else {
+        // Validation passed
+        console.log(`No errors found, time to save the new ad to db`);
+        User.findOne({
+            _id: req.user._id
         })
+            .then(user => {
+                if (!user) {
+                    errors.push({
+                        msg: "You don't seem ot have a valid account"
+                    });
+                    console.log("Attempt made to create job ad by user with no matching user id in db");
+                    res.render('createJob', {errors});
+                } else {
+                    // Generate new JobAdvertisement object to be stored in the database
+                    const newJobAdvertisement = new JobAdvertisement({
+                        businessName,
+                        businessPhone,
+                        businessEmail,
+                        jobTitle,
+                        jobDescription,
+                        jobType,
+                        jobAddress,
+                        jobCity,
+                        jobState,
+                        jobCountry,
+                        remuneration,
+                        isCurrent,
+                        postedByUserID,
+                        postDate,
+                    });
+                    // Force the email address to lower case before saving, set some other default values.
+                    newJobAdvertisement.businessEmail = newJobAdvertisement.businessEmail.toLowerCase();
+                    newJobAdvertisement.isCurrent = true;
+                    newJobAdvertisement.postedByUserID = req.user._id;
+                    newJobAdvertisement.save()
+                        .then(user => {
+                            // Stores a message in Session that will be displayed after the redirect
+                            req.flash(
+                                'success_msg',
+                                'New job advertisement saved successfully'
+                            );
+                            res.redirect('createJob');
+                        })
+                        .catch(err => console.log(err));
+                }
+            })
+    }
+});
+
+// Edit Job - serve page
+router.get('/editJob', ensureAuthenticated, (req, res) => {
+    console.log('Request made to open job ad edit page');
+    res.render('editJob', {
+        user: req.user
+    })
+});
+
+// Edit Job - handle job edit request
+router.post('/editJob', ensureAuthenticated, (req, res) => {
+    console.log(`Request to edit job ad initiated.`);
+
+    const {
+        businessName,
+        businessPhone,
+        businessEmail,
+        jobTitle,
+        jobDescription,
+        jobType,
+        jobAddress,
+        jobCity,
+        jobState,
+        jobCountry,
+        remuneration,
+        isCurrent,
+        postedByUserID,
+        postDate,
+    } = req.body;
+
+    let errors = [];
+
+    // Check required fields
+    if (!businessName || !businessPhone || !businessEmail || !jobTitle || !jobDescription || !jobType || !jobAddress
+        || !jobCity || !jobState || !jobCountry) {
+        errors.push({
+            msg: 'Please fill in all fields'
+        });
     }
 
     // If any errors are present we re-render the screen with the user inputs in place, otherwise
     // begin database procedure
     if (errors.length > 0) {
-        res.render('register', {
+        res.render('createJob', {
             errors,
-            firstName,
-            lastName,
-            email,
-            phone,
-            userType,
-            password,
-            password2
+            businessName,
+            businessPhone,
+            businessEmail,
+            jobTitle,
+            jobDescription,
+            jobType,
+            jobAddress,
+            jobCity,
+            jobState,
+            jobCountry,
+            remuneration,
+            isCurrent,
+            postedByUserID,
+            postDate,
         });
     } else {
         // Validation passed
-
+        console.log(`No errors found, time to save the new ad to db`);
         User.findOne({
-            email: email
+            _id: req.user._id
         })
             .then(user => {
-                if (user) {
-                    // User with the provided email address already exists in database
+                if (!user) {
                     errors.push({
-                        msg: 'Email is already registered'
-                    })
-                    res.render('register', {
-                        errors,
-                        firstName,
-                        lastName,
-                        email,
-                        phone,
-                        userType,
-                        password,
-                        password2
+                        msg: "You don't seem ot have a valid account"
                     });
+                    console.log("Attempt made to create job ad by user with no matching user id in db");
+                    res.render('createJob', {errors});
                 } else {
-                    // Generate new User object to be stored in the database
-                    const newUser = new User({
-                        firstName,
-                        lastName,
-                        email,
-                        phone,
-                        userType,
-                        password,
+                    // Generate new JobAdvertisement object to be stored in the database
+                    const newJobAdvertisement = new JobAdvertisement({
+                        businessName,
+                        businessPhone,
+                        businessEmail,
+                        jobTitle,
+                        jobDescription,
+                        jobType,
+                        jobAddress,
+                        jobCity,
+                        jobState,
+                        jobCountry,
+                        remuneration,
+                        isCurrent,
+                        postedByUserID,
+                        postDate
                     });
-
                     // Force the email address to lower case before saving
-                    newUser.email = newUser.email.toLowerCase();
-
-                    // Salt the password before saving new User object to database
-                    bcrypt.genSalt(10, (err, salt) => {
-                        bcrypt.hash(newUser.password, salt, (err, hash) => {
-                            if (err) throw err;
-                            newUser.password = hash;
-                            newUser
-                                .save()
-                                .then(user => {
-                                    // Stores a message in Session that will be displayed after the redirect
-                                    req.flash(
-                                        'success_msg',
-                                        'You are now registered and can log in'
-                                    );
-                                    res.redirect('/users/login');
-                                })
-                                .catch(err => console.log(err));
-                        });
-                    });
+                    newJobAdvertisement.businessEmail = newJobAdvertisement.businessEmail.toLowerCase();
+                    newJobAdvertisement.isCurrent = true;
+                    newJobAdvertisement.postedByUserID = req.user._id
+                    newJobAdvertisement.save()
+                        .then(user => {
+                            // Stores a message in Session that will be displayed after the redirect
+                            req.flash(
+                                'success_msg',
+                                'Job advertisement modified successfully'
+                            );
+                            res.redirect('jobs');
+                        })
+                        .catch(err => console.log(err));
                 }
-            });
+            })
     }
 });
 
-// Job page - single job view
-router.get('/job', ensureAuthenticated, (req, res) => {
-    console.log('Request made to open job page');
-    res.render('job', {
-        user: req.user
-    })
+// Job - serve job page (single listing with more details)
+router.get('/job', ensureAuthenticated, function (req, res) {
+    let jobId = req.query.jobId;
+
+    console.log('Request made to view job ad with id: ' + jobId);
+
+    JobAdvertisement.findById(jobId, (err, result) => {
+        if (err) {
+            return console.log(`Error has occurred: ${err}`);
+        } else {
+            res.render('job', {
+                user: req.user,
+                jobAd: result
+            });
+        }
+    });
 });
 
-// Jobs page - all jobs view
+// Jobs - serve jobs page (all listings)
 router.get('/jobs', ensureAuthenticated, (req, res) => {
     console.log('Request made to open jobs page');
-    res.render('jobs', {
-        user: req.user
-    })
+    JobAdvertisement.find({"isCurrent": "true"}, (err, result) => {
+        if (err) {
+            return console.log(`Error has occurred: ${err}`);
+        } else {
+            // console.log(result);
+            res.render('jobs', {
+                user: req.user,
+                jobAds: result
+            });
+        }
+    });
 });
 
-// Help page
+// Help - serve page
 router.get('/help', ensureAuthenticated, (req, res) => {
     console.log('Request made to open help page');
     res.render('help', {
@@ -177,7 +301,7 @@ router.get('/help', ensureAuthenticated, (req, res) => {
 
 
 
-// Resume upload page
+// Resume - serve page
 router.get('/resume', ensureAuthenticated, (req, res) => {
     console.log('Request made to open resume page');
     res.render('resume', {
@@ -185,7 +309,7 @@ router.get('/resume', ensureAuthenticated, (req, res) => {
     })
 });
 
-// Resume upload request handle
+// Resume - handle resume upload request
 router.post('/resume', (req, res, next) => {
     console.log('Request made to handle a resume POST');
     let form = new formidable.IncomingForm();
@@ -205,11 +329,11 @@ router.post('/resume', (req, res, next) => {
         'Resume uploaded successfully'
     );
 
-    res.redirect('/resume');
+    res.redirect('/profile');
 
 });
 
-// Test page
+// Test - serve page
 router.get('/test', ensureAuthenticated, (req, res) => {
     console.log('Request made to open test page');
     res.render('test', {
@@ -217,25 +341,22 @@ router.get('/test', ensureAuthenticated, (req, res) => {
     })
 });
 
-// router.use(function(err, req, res, next) {
-//     console.error(err.message);
-//     if (!err.statusCode) err.statusCode = 500; // Sets a generic server error status code if none is part of the err
-//
-//     if (err.shouldRedirect) {
-//         res.render('404') // Renders a myErrorPage.html for the user
-//     } else {
-//         res.status(err.statusCode).send(err.message); // If shouldRedirect is not defined in our error, sends our original err data
-//     }
+// Error handling for routing. Can't be applied unless we fold the multiple route file together.
+// //A Route for Creating a 500 Error (Useful to keep around)
+// router.get('/500', function(req, res){
+//     throw new Error('This is a 500 Error');
 // });
 //
-// // Handle request for undeclared pages.
-// router.get('*', function(req, res, next) {
-//     let err = new Error(`${req.ip} tried to reach ${req.originalUrl}`); // Tells us which IP tried to reach a particular URL
-//     err.statusCode = 404;
-//     err.shouldRedirect = true; //New property on err so that our middleware will redirect
-//     next(err);
+// //The 404 Route (ALWAYS Keep this as the last route)
+// router.get('/*', function(req, res){
+//     res.render('404');
+//     throw new NotFound;
 // });
-
-
+//
+// function NotFound(msg){
+//     this.name = 'NotFound';
+//     Error.call(this, msg);
+//     Error.captureStackTrace(this, arguments.callee);
+// }
 
 module.exports = router;

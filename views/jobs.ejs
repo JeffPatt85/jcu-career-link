@@ -3,11 +3,66 @@
         <div class="card card-body">
             <%- include nav.ejs %>
             <h1 class="text-center mb-3"></h1>
-            <% include ./partials/messages %>
-            <p>Pommy ipsum nigh because there was nothing on the gogglebox got a lot of brass up at the crack of dawn treacle what a mug, flog a dead horse trouble and strife what a load of cobblers a right toff odds and sods guinness. Working class had a barney with the inlaws mush on his bill whizz golly, scatterbrained munta doing my nut in a right royal knees up. Full English breakast blummin' rubbish one would like nuthouse old girl knee high to a grasshopper i'll be a monkey's uncle by 'eck love, ask your mother if off t'pub pillock jolly good conked him one on the nose a right royal knees up chaps, 221B Baker Street black pudding off the hook conkers slappers they can sod off. </p>
-
-            <p>Pikey a cracking taking the mick bit of a div, jellied eels. </p>
+            <% if (jobAds.length >= 1) { %>
+                <% include ./partials/messages %>
+                    <% for (var i = 0; i < jobAds.length; i++) { %>
+                        <% if (user._id == jobAds[i].postedByUserID) { %>
+            <div class="col-md-12 m-auto border border-secondary rounded-sm mt-4 p-3">
+                <p><em><i>You posted this job advertisement</i></em></p>
+                <% } else { %>
+                <div class="col-md-12 m-auto border rounded-sm mt-4 p-3">
+                    <% } %>
+                    <div class="clearfix">
+                        <div class="float-left">
+                            <h3 class="border border-right-0 border-bottom-0 border-top-0 border-primary pl-1">
+                                <a href="/job?jobId=<%= jobAds[i]._id %>"><%= (jobAds[i].jobTitle); %></a>
+                            </h3>
+                        </div>
+                        <div class="float-right">
+                            <% if (user._id == jobAds[i].postedByUserID) { %>
+                                <ul class="list-unstyled">
+                                    <li class="list-inline-item"><h4><a href="/editJob?jobId=<%= jobAds[i]._id %>"><i
+                                                        class="far fa-edit"></i></a></h4></li>
+                                    <li class="list-inline-item"><h4><a
+                                                    href="/bookmarkJob?jobId=<%= jobAds[i]._id %>"><i
+                                                        class="far fa-bookmark"></i></a></h4></li>
+                                </ul>
+                            <% } else { %>
+                                <ul class="list-unstyled">
+                                    <li class="list-inline-item"><h4><a
+                                                    href="/bookmarkJob?jobId=<%= jobAds[i]._id %>"><i
+                                                        class="far fa-bookmark"></i></a></h4></li>
+                                </ul>
+                            <% } %>
+                        </div>
+                    </div>
+                    <ul class="list-unstyled">
+                        <li><%= jobAds[i].businessName %></li>
+                        <li><%= jobAds[i].jobCountry %> > <%= jobAds[i].jobState %> > <%= jobAds[i].jobCity %></li>
+                        <li>Job Description: <%= jobAds[i].jobDescription; %></li>
+                        <li>Job Type: <%= jobAds[i].jobType %></li>
+                        <li>Posted: <%= jobAds[i].postDate %></li>
+                    </ul>
+                    <div class="clearfix">
+                        <% if (jobAds[i].lastModified != jobAds[i].postDate) { %>
+                            <div class="float-left mt-3">
+                                <i>Listing last modified:
+                                    <% jobAds[i].lastModified %>
+                                </i>
+                            </div>
+                        <% } %>
+                        <div class="float-right mt-3">
+                            <a href="/job?jobId=<%= jobAds[i]._id %>">More details..</a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+                <% } else { %>
+                    <div class="col-md-12 m-auto border rounded-sm mt-4 p-3">There are no job advertisements to
+                        display!
+                    </div>
+                <% } %>
+            </div> <!-- End card-body -->
+            <%- include footer.ejs %>
         </div>
-        <%- include footer.ejs %>
     </div>
-</div>

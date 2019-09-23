@@ -31,7 +31,7 @@ router.post('/register', (req, res) => {
     function checkPassword(str) {
         // Password should contain at least eight characters long, 
         // contain at least one number, one lowercase and one uppercase letter
-        var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+        let re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
         return re.test(str);
     }
 
@@ -80,7 +80,7 @@ router.post('/register', (req, res) => {
                     // User with the provided email address already exists in database
                     errors.push({
                         msg: 'Email is already registered'
-                    })
+                    });
                     res.render('register', {
                         errors,
                         firstName,
@@ -100,10 +100,14 @@ router.post('/register', (req, res) => {
                         phone,
                         userType,
                         password,
+                        lastModified
                     });
 
                     // Force the email address to lower case before saving
                     newUser.email = newUser.email.toLowerCase();
+
+                    // Best set the lastModified so there's no issues.
+                    newUser.lastModified = Date.now;
 
                     // Salt the password before saving new User object to database
                     bcrypt.genSalt(10, (err, salt) => {
@@ -149,4 +153,3 @@ router.get('/logout', (req, res) => {
 });
 
 module.exports = router;
-

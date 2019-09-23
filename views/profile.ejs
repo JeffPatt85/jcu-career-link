@@ -9,24 +9,34 @@
                     <img src="/images/foamy.jpg" alt="Foamy the Squirrel">
                 </div>
                 <div class="col-md-6">
-                    <p><b>Name: </b><%= user.firstName %> <%= user.lastName %></p>
-                    <p><b>User Type: </b><%= user.userType %></p>
-                    <p><b>Email: </b><%= user.email %></p>
-                    <p><b>Phone: </b><%= user.phone %></p>
+                    <section>
+                        <dl>
+                            <dt><span>Name</span></dt>
+                            <dd><span><%= user.firstName %> <%= user.lastName %></span></dd>
+                            <dt><span>Account Type</span></dt>
+                            <dd><span><%= user.userType %></span></dd>
+                            <dt><span>Email</span></dt>
+                            <dd><span><%= user.email %></span></dd>
+                            <dt><span>Phone</span></dt>
+                            <dd><span><%= user.phone %></span></dd>
+                        </dl>
+                    </section>
                 </div>
             </div>
+            <hr/>
             <div class="row">
                 <div class="col-md-12">
-                <p><b>Summary</b></p>
-            </div>
+                    <p><b>Summary</b></p>
+                </div>
                 <div class="col-md-12">
                     <p>Some description field that we should fill out if we want to be anything like the big guns.</p>
                 </div>
             </div>
-            <a href="/addUserPhoto" class="btn btn-primary">Add Photo</a>
-            <a href="/resume" class="btn btn-primary">Add Resume</a>
-            <a href="/editPersonalDetails" class="btn btn-primary">Edit Details <i class="fas fa-edit"></i></a>
-        </div>
+            <hr />
+            <a href="/addProfilePhoto" class="btn btn-primary col-md-4">Add Photo</a>
+            <a href="/resume" class="btn btn-primary col-md-4">Add Resume</a>
+            <a href="/editProfile" class="btn btn-primary col-md-4">Edit Details <i class="fas fa-edit"></i></a>
+        </div> <!-- End card-body -->
         <%- include footer.ejs %>
     </div>
 </div>

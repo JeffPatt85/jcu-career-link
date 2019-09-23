@@ -37,10 +37,18 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    profilePhoto: {
+        type: String,
+        required: false
+    },
     date: {
         type: Date,
         default: Date.now
     },
+    lastModified: {
+        type: Date,
+        required: true
+    }
 });
 
 const User = mongoose.model('User', UserSchema);

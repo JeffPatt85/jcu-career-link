@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
 
-const EndorsementSchema = new mongoose.Schema({
-    studentUserID: {
+const BookmarkedJobSchema = new mongoose.Schema({
+    jobAdvertisementId: {
         type: String,
         required: true
     },
-    lecturerUserID: {
+    bookmarkedByUserID: {
         type: String,
         required: true
-    },
-    jobAdvertisementID: {
-      type: String,
-      required: true
     },
     postDate: {
         type: Date,
@@ -27,6 +23,6 @@ const EndorsementSchema = new mongoose.Schema({
     }
 });
 
-const Endorsement = mongoose.model('Endorsement', EndorsementSchema);
+const BookmarkedJob = mongoose.model('BookmarkedJob', BookmarkedJobSchema);
 
-module.exports = Endorsement;
+module.exports = BookmarkedJob;
