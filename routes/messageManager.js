@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+
 const {
     ensureAuthenticated,
     forwardAuthenticated
@@ -64,7 +65,25 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
                     res.redirect('/messages')
                 }
             })
-    }
-});
 
-module.exports = router;
+
+    }});
+
+// Messages page
+    router.get('/messages', ensureAuthenticated, (req, res) => {
+        console.log('Request made to open messages page');
+        console.log(req.user.email);
+        Message.find({ recipient : req.user.email}, (err,results) => {
+            if (err){
+                return console.log('Error has occurred: $(err)');
+            } else {
+                res.render('messages'
+                    , {user: req.user , userMessages : results}
+                )
+            }
+        })
+
+
+    });
+module.exports = router ;
+

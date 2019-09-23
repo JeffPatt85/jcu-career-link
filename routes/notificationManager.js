@@ -5,7 +5,6 @@ const {
     ensureAuthenticated,
     forwardAuthenticated
 } = require('../config/auth');
-console.log("You reached the notification manager");
 router.get('/trigger', ensureAuthenticated, (req , res) => {
     notifier.notify({
         title : 'JCU Career Link' ,

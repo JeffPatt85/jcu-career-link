@@ -31,11 +31,13 @@
                     <th>Date</th>
                     <th>Message</th>
                 </tr>
+                <% for(var i=0; i<userMessages.length; i++){ %>
                 <tr>
-                    <th>Bilbo Baggins</th>
-                    <th>A long time ago</th>
-                    <th>Hey Gandalf, just sending this to let you know that I've found a ring</th>
+                    <th><%= userMessages[i].sender%></th>
+                    <th><%= userMessages[i].sentDate%></th>
+                    <th><%= userMessages[i].content%></th>
                 </tr>
+                <% } %>
             </table>
             </p>
             <p>
