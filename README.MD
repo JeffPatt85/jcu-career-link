@@ -16,6 +16,7 @@ development machine isn't necessary.
     * ejs
     * express-ejs-layouts
     * node-notifier
+    * formidable
 
 
 ## Deploying on localhost

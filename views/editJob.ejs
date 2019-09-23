@@ -2,9 +2,9 @@
     <div class="col-md-9 m-auto">
         <div class="card card-body">
             <%- include nav.ejs %>
-            <h1 class="text-center mb-3">Create new job advertisement</h1>
+            <h1 class="text-center mb-3">Edit job advertisement</h1>
             <% include ./partials/messages %>
-            <form action="/createJob" method="POST">
+            <form action="/editJob" method="POST">
                 <div class="form-group">
                     <label for="businessName">Business Name</label>
                     <input type="text" id="businessName" name="businessName" class="form-control"

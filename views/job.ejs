@@ -2,12 +2,76 @@
     <div class="col-md-9 m-auto">
         <div class="card card-body">
             <%- include nav.ejs %>
-            <h1 class="text-center mb-3">Individual Listing</h1>
+            <h1 class="text-center mb-3"></h1>
             <% include ./partials/messages %>
-            <p>Pommy ipsum nigh because there was nothing on the gogglebox got a lot of brass up at the crack of dawn treacle what a mug, flog a dead horse trouble and strife what a load of cobblers a right toff odds and sods guinness. Working class had a barney with the inlaws mush on his bill whizz golly, scatterbrained munta doing my nut in a right royal knees up. Full English breakast blummin' rubbish one would like nuthouse old girl knee high to a grasshopper i'll be a monkey's uncle by 'eck love, ask your mother if off t'pub pillock jolly good conked him one on the nose a right royal knees up chaps, 221B Baker Street black pudding off the hook conkers slappers they can sod off. </p>
-
-            <p>Pikey a cracking taking the mick bit of a div, jellied eels. </p>
+            <% if (user._id == jobAd.postedByUserID) { %>
+            <div class="col-md-12 m-auto border border-secondary rounded-sm mt-4 p-3">
+                <p><em><i>You posted this job advertisement</i></em></p>
+                <% } else { %>
+                <div class="col-md-12 m-auto border rounded-sm mt-4 p-3">
+                    <% } %>
+                    <div class="clearfix" id="job-title-section">
+                        <div class="float-left">
+                            <h3><%= jobAd.jobTitle %></h3>
+                            <h3><%= jobAd.businessName %></h3>
+                        </div>
+                        <div class="float-right">
+                            <% if (user._id == jobAd.postedByUserID) { %>
+                                <ul class="list-unstyled">
+                                    <li class="list-inline-item"><h4><a href="/editJob?jobId=<%= jobAd._id %>"><i
+                                                        class="far fa-edit"></i></a></h4></li>
+                                    <li class="list-inline-item"><h4><a
+                                                    href="/bookmarkJob?jobId=<%= jobAd._id %>"><i
+                                                        class="far fa-bookmark"></i></a></h4></li>
+                                </ul>
+                            <% } else { %>
+                                <ul class="list-unstyled">
+                                    <li class="list-inline-item"><h4><a
+                                                    href="/bookmarkJob?jobId=<%= jobAd._id %>"><i
+                                                        class="far fa-bookmark"></i></a></h4></li>
+                                </ul>
+                            <% } %>
+                        </div>
+                    </div> <!-- End job-title-section -->
+                    <hr/>
+                    <section>
+                        <dl>
+                            <dt><span>Job Posted Date</span></dt>
+                            <dd><span><%= jobAd.postDate %></span></dd>
+                            <dt><span>Location</span></dt>
+                            <dd><span><%= jobAd.jobCity %>, <%= jobAd.jobState %>, <%= jobAd.jobCountry %></span>
+                            </dd>
+                            <dt><span>Job Type</span></dt>
+                            <dd><span><%= jobAd.jobType %></span></dd>
+                            <dt>Remuneration</dt>
+                            <dd><%= jobAd.remuneration %></dd>
+                        </dl>
+                    </section>
+                    <hr/>
+                    <section>
+                        <dl>
+                            <dt><span>Job Description</span></dt>
+                            <dd><span><%= jobAd.jobDescription %></span></dd>
+                        </dl>
+                    </section>
+                    <hr/>
+                    <div class="jcuLink-job-options">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6"></div>
+                    </div>
+                    <div class="jcuLink-social-links text-center">
+                        <ul class="list-inline list-unstyled">
+                            <li class="list-inline-item"><a href="https://www.facebook.com"><i
+                                            class="fab fa-facebook-f"></i></a></li>
+                            <li class="list-inline-item"><a href="https://www.twitter.com"><i
+                                            class="fab fa-twitter"></i></a></li>
+                            <li class="list-inline-item"><a href="https:///www.linkedin.com"><i
+                                            class="fab fa-linkedin"></i></a>
+                            </li>
+                        </ul>
+                    </div> <!-- End jcuLinks-social-links -->
+                </div>
+            </div> <!-- End card-body -->
         </div>
         <%- include footer.ejs %>
     </div>
-</div>

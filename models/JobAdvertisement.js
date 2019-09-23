@@ -57,6 +57,10 @@ const JobAdvertisementSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    lastModified: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const JobAdvertisement = mongoose.model('JobAdvertisement', JobAdvertisementSchema);

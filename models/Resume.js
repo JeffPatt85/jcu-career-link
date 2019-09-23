@@ -17,6 +17,10 @@ const ResumeSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    lastModified: {
+        type: Date,
+        required: true
+    }
 });
 
 const Resume = mongoose.model('Resume', ResumeSchema);

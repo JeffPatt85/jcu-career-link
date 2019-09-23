@@ -9,7 +9,7 @@ const {
 const User = require('../models/user');
 const Message = require('../models/message');
 
-router.post('/sendMessage', ensureAuthenticated, (req , res) => {
+router.post('/sendMessage', ensureAuthenticated, (req, res) => {
     console.log('Send message button pressed');
     const sender = req.user.email;
     const {
@@ -17,13 +17,12 @@ router.post('/sendMessage', ensureAuthenticated, (req , res) => {
         content
     } = req.body;
 
-    let errors =[];
+    let errors = [];
 
-    if (!recipient || !content){
+    if (!recipient || !content) {
         errors.push({
             msg: 'Please fill in all fields'
         })
-
     }
 
     if (errors.length > 0) {
@@ -33,19 +32,19 @@ router.post('/sendMessage', ensureAuthenticated, (req , res) => {
             recipient,
             content
         });
-    }else{
-        console.log("No  form errors");
+    } else {
+        console.log("No form errors");
         User.findOne({
-            email : recipient
+            email: recipient
         })
-            .then(user =>{
-                if (!user){
+            .then(user => {
+                if (!user) {
                     errors.push({
                         msg: "That user doesn't exist"
                     });
                     console.log("User doesn't exist");
-                    res.render('messages',{errors});
-                }else{
+                    res.render('messages', {errors});
+                } else {
                     const newMessage = new Message({
                         sender,
                         recipient,
@@ -54,7 +53,7 @@ router.post('/sendMessage', ensureAuthenticated, (req , res) => {
                     newMessage.recipient = newMessage.recipient.toLowerCase();
                     newMessage
                         .save()
-                        .then(user =>{
+                        .then(user => {
                             req.flash(
                                 'success_msg',
                                 'You have sent ' + recipient + " a message"
@@ -65,11 +64,7 @@ router.post('/sendMessage', ensureAuthenticated, (req , res) => {
                     res.redirect('/messages')
                 }
             })
-
     }
-
-
-
-
 });
-module.exports = router ;
+
+module.exports = router;
