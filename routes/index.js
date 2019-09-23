@@ -6,6 +6,10 @@ const {
     forwardAuthenticated
 } = require('../config/auth');
 
+
+
+
+
 // Welcome page
 router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 
@@ -171,13 +175,7 @@ router.get('/help', ensureAuthenticated, (req, res) => {
     })
 });
 
-// Messages page
-router.get('/messages', ensureAuthenticated, (req, res) => {
-    console.log('Request made to open messages page');
-    res.render('messages', {
-        user: req.user
-    })
-});
+
 
 // Resume upload page
 router.get('/resume', ensureAuthenticated, (req, res) => {
