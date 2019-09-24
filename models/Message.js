@@ -21,10 +21,6 @@ const MessageSchema = new mongoose.Schema({
         type: Boolean,
         default : false
     },
-    lastModified: {
-        type: Date,
-        required: true
-    }
 });
 
 const Message = mongoose.model('Message', MessageSchema);

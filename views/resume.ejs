@@ -4,7 +4,7 @@
             <%- include nav.ejs %>
             <h1 class="text-center mb-3">Resume</h1>
             <% include ./partials/messages %>
-            <div class="text-center col-md-12">
+            <div class="text-center col-md-12 mb-3">
                 <img class="img-fluid" src="/images/resume.jpg" alt="A Resume">
             </div>
             <p>Here you can upload the latest copy of your resume or curriculum vitae, which can be viewed by other <i>JCU
@@ -20,6 +20,18 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Upload</button>
             </form>
+            <hr/>
+            <div class="jcuLink-social-links text-center"> <!-- Start jcuLinks-social-links -->
+                <ul class="list-inline list-unstyled">
+                    <li class="list-inline-item"><a href="https://www.facebook.com"><i
+                                    class="fab fa-facebook-f"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.twitter.com"><i
+                                    class="fab fa-twitter"></i></a></li>
+                    <li class="list-inline-item"><a href="https:///www.linkedin.com"><i
+                                    class="fab fa-linkedin"></i></a>
+                    </li>
+                </ul>
+            </div> <!-- End jcuLinks-social-links -->
         </div> <!-- End card-body -->
         <%- include footer.ejs %>
     </div>

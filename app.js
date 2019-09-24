@@ -75,5 +75,6 @@ app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/notificationManager', require('./routes/notificationManager'));
 app.use('/messageManager', require('./routes/messageManager'));
+
 // Establish server and listener
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
