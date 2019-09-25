@@ -36,7 +36,7 @@ mongoose.connect(db, {
     .catch(err => console.log(err));
 
 // Declare port to be used
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 
 // EJS (Templating engine)
 app.use(expressLayouts);

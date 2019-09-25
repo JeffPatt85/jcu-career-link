@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const notifier = require('node-notifier')
 
 const {
     ensureAuthenticated,
@@ -17,7 +18,7 @@ router.get('/trigger', ensureAuthenticated, (req , res) => {
     });
 
 
-    res.redirect('/messages')
+    res.redirect('/messageManager/messages')
 });
 
 

@@ -37,6 +37,7 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
         });
     } else {
         console.log("No form errors");
+
         User.findOne({
             email: recipient
         })
@@ -65,7 +66,7 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
                         });
                     console.log('Sending message to ' + recipient);
                     console.log('The message is ' + content);
-                    res.redirect('/messageManager/messages')
+                    res.redirect('/messageManager/messages', errors)
                 }
             })
 
