@@ -12,6 +12,8 @@ const User = require('../models/user');
 const Message = require('../models/message');
 
 global.currentUser = undefined;
+
+
 router.post('/sendMessage', ensureAuthenticated, (req, res) => {
     console.log('Send message button pressed');
     const sender = req.user.email;
@@ -23,18 +25,9 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
     let errors = [];
 
     if (!recipient || !content) {
-        errors.push({
-            msg: 'Please fill in all fields'
-        })
-    }
+        req.flash('error_msg', "Please fill in all fields");
+        res.redirect('/messageManager/messages')
 
-    if (errors.length > 0) {
-        console.log("Caught an error");
-        res.render('messages', {
-            errors,
-            recipient,
-            content
-        });
     } else {
         console.log("No form errors");
 
@@ -43,12 +36,11 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
         })
             .then(user => {
                 if (!user) {
-                    errors.push({
-                        msg: "That user doesn't exist"
-                    });
                     console.log("User doesn't exist");
-                    res.redirect('/messageManager/messages', {errors});
-                    // res.render('messages', {errors});
+                    req.flash('error_msg', "That user doesn't exist");
+                    res.redirect('/messageManager/messages')
+
+
                 } else {
                     const newMessage = new Message({
                         sender,
@@ -59,14 +51,14 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
                     newMessage
                         .save()
                         .then(user => {
+                            console.log('Sending message to ' + recipient);
+                            console.log('The message is ' + content);
                             req.flash(
                                 'success_msg',
                                 'You have sent ' + recipient + " a message"
                             );
+                            res.redirect('/messageManager/messages')
                         });
-                    console.log('Sending message to ' + recipient);
-                    console.log('The message is ' + content);
-                    res.redirect('/messageManager/messages', errors)
                 }
             })
 

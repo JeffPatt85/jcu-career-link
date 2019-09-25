@@ -20,11 +20,12 @@ const MessageSchema = new mongoose.Schema({
     isRead : {
         type: Boolean,
         default : false
-    },
-    lastModified: {
-        type: Date,
-        required: true
     }
+    // ,
+    // lastModified: {
+    //     type: Date,
+    //     required: true
+    // }
 });
 
 const Message = mongoose.model('Message', MessageSchema);

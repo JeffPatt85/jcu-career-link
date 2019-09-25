@@ -10,6 +10,7 @@ const app = express();
 
 const path = require('path');
 
+
 // Favicon for the sake of completeness
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 

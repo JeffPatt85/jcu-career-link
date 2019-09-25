@@ -5,6 +5,7 @@
         border-top: hidden;
         border-bottom: hidden;
         border-right: hidden;
+        background-color: white;
     }
     table {
 
@@ -31,7 +32,7 @@
         <div class="card card-body">
             <%- include nav.ejs %>
             <h1 class="text-center mb-3">Messages</h1>
-            <% include ./partials/messages %>
+
             <p>
             <h1>Your messages</h1>
             <table>
@@ -63,6 +64,7 @@
             </p>
             <p>
             <h1>Send a message</h1>
+            <% include ./partials/messages.ejs %>
             <form action="/messageManager/sendMessage" method="post">
                 Recipient : <input type="text" name="recipient" value="">
                 <br>
@@ -78,5 +80,6 @@
         <%- include footer.ejs %>
     </div>
 </div>
+
 </body>
 </html>
