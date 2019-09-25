@@ -33,6 +33,7 @@ router.get('/bookmarkJob', ensureAuthenticated, function (req, res) {
             // Check the current state of the isCurrent value.
             if (bookmarkedJobs.isCurrent === true) {
                 bookmarkedJobs.isCurrent = false;
+                bookmarkedJobs.lastModified = Date.now();
                 bookmarkedJobs.save();
 
                 console.log('Existing bookmark isCurrent value changed from true to false.');
@@ -45,6 +46,7 @@ router.get('/bookmarkJob', ensureAuthenticated, function (req, res) {
                 res.redirect('jobs');
             } else {
                 bookmarkedJobs.isCurrent = true;
+                bookmarkedJobs.lastModified = Date.now();
                 bookmarkedJobs.save();
 
                 console.log('Existing bookmark isCurrent value changed from false to true.');
