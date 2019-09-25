@@ -209,26 +209,26 @@ router.get('/editJob', ensureAuthenticated, (req, res) => {
     console.log('Request made to view job ad with id: ' + jobId);
 
     // Retrieve the values for the job using another mongo call.
+    JobAdvertisement.findOne({_id: jobId}, function (err, advertisement) {
+        if (err) {
+            return console.log(`Error has occurred: ${err}`);
+        }
+        // Render the edit page with the current values for the advertisement in place.
+        res.render('editJob', {
+            businessName: advertisement.businessName,
+            businessPhone: advertisement.businessPhone,
+            businessEmail: advertisement.businessEmail,
+            jobTitle: advertisement.title,
+            jobDescription: advertisement.description,
+            jobType: advertisement.jobType,
+            jobAddress: advertisement.jobAddress,
+            jobCity: advertisement.jobCity,
+            jobState: advertisement.jobState,
+            jobCountry: advertisement.jobCountry,
+            remuneration: advertisement.remuneration,
+        });
 
-    // Render the edit page with the current values for the advertisement in place.
-
-    res.render('editJob', {
-        businessName,
-        businessPhone,
-        businessEmail,
-        jobTitle,
-        jobDescription,
-        jobType,
-        jobAddress,
-        jobCity,
-        jobState,
-        jobCountry,
-        remuneration,
-        isCurrent,
-        postedByUserID,
-        postDate
     });
-
 });
 
 // Edit Job - handle job edit request
