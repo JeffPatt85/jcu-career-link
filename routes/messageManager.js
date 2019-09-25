@@ -118,7 +118,8 @@ const notificationCheck = setInterval(function(){
 
             }
         })
-    },60000
+    //Timer for message checking to generate notifications in milliseconds
+    },600000
 );
 module.exports = router ;
 
