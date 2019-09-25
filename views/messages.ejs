@@ -7,6 +7,12 @@
         border-right: hidden;
         background-color: white;
     }
+    .delete-button{
+        border-top: hidden;
+        border-bottom: hidden;
+        border-right: hidden;
+        background-color: white;
+    }
     table {
 
     }
@@ -53,10 +59,22 @@
                                     <button>Mark as read</button>
                                 </form>
                             </th>
+                            <th class="delete-button">
+                                <form action="/messageManager/deleteMessage" method="post">
+                                    <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
+                                    <button>Delete</button>
+                                </form>
+                            </th>
                     <% }else{ %>
                              <th><%= userMessages[i].sender%></th>
                              <th><%= userMessages[i].sentDate%></th>
                              <th><%= userMessages[i].content%></th>
+                             <th class="delete-button">
+                                 <form action="/messageManager/deleteMessage" method="post">
+                                     <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
+                                     <button>Delete</button>
+                                 </form>
+                             </th>
                         <% } %>
                 </tr>
                 <% } %>
