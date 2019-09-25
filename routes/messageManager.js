@@ -13,7 +13,25 @@ const Message = require('../models/message');
 
 global.currentUser = undefined;
 
+//Code to delete messages
+router.post('/deleteMessage', ensureAuthenticated, (req, res)=> {
+    const messageID = req.body.messageId;
+    console.log("Request made to delete the message with the ID:" + messageID);
 
+    // console.log(messageID);
+    Message.findByIdAndDelete(new ObjectID(messageID),(err, result) =>{
+        if (err){
+            return console.log('Database error has occurred: '+ err);
+        }else {
+            // console.log("Result +" + result);
+            console.log("Success");
+            req.flash('success_msg', "Message deleted");
+            res.redirect('/messageManager/messages')
+        }
+    })
+});
+
+// Sending messages to the database
 router.post('/sendMessage', ensureAuthenticated, (req, res) => {
     console.log('Send message button pressed');
     const sender = req.user.email;
@@ -65,7 +83,7 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
 
     }});
 
-// Messages page
+// Loading the messages page
     router.get('/messages', ensureAuthenticated, (req, res) => {
         console.log('Request made to open messages page');
         console.log(req.user.email);
@@ -82,6 +100,7 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
         })
     });
 
+    //Marking messages as read
     router.post('/markMessageRead', ensureAuthenticated, (req, res)=> {
         console.log("Request made to mark message as read");
         const messageID = req.body.messageId;
