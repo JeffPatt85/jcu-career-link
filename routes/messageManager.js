@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
-
+const ObjectID= require('mongodb').ObjectID;
+const session = require('express-session');
+const notifier = require('node-notifier');
 const {
     ensureAuthenticated,
     forwardAuthenticated
@@ -10,6 +11,7 @@ const {
 const User = require('../models/user');
 const Message = require('../models/message');
 
+global.currentUser = undefined;
 router.post('/sendMessage', ensureAuthenticated, (req, res) => {
     console.log('Send message button pressed');
     const sender = req.user.email;
@@ -44,7 +46,8 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
                         msg: "That user doesn't exist"
                     });
                     console.log("User doesn't exist");
-                    res.render('messages', {errors});
+                    res.redirect('/messageManager/messages', {errors});
+                    // res.render('messages', {errors});
                 } else {
                     const newMessage = new Message({
                         sender,
@@ -62,7 +65,7 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
                         });
                     console.log('Sending message to ' + recipient);
                     console.log('The message is ' + content);
-                    res.redirect('/messages')
+                    res.redirect('/messageManager/messages')
                 }
             })
 
@@ -73,17 +76,56 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
     router.get('/messages', ensureAuthenticated, (req, res) => {
         console.log('Request made to open messages page');
         console.log(req.user.email);
+        currentUser = req.user.email;
         Message.find({ recipient : req.user.email}, (err,results) => {
             if (err){
                 return console.log('Error has occurred: $(err)');
             } else {
+                // console.log(results);
                 res.render('messages'
                     , {user: req.user , userMessages : results}
                 )
             }
         })
-
-
     });
+
+    router.post('/markMessageRead', ensureAuthenticated, (req, res)=> {
+        console.log("Request made to mark message as read");
+        const messageID = req.body.messageId;
+        // console.log(messageID);
+        Message.findByIdAndUpdate(new ObjectID(messageID), {isRead : true}, (err, result) =>{
+            if (err){
+                return console.log('Database error has occurred: '+ err);
+            }else {
+                // console.log("Result +" + result);
+                console.log("Success");
+                res.redirect('/messageManager/messages')
+            }
+        })
+    });
+
+// Code to check for unread messages
+const notificationCheck = setInterval(function(){
+        Message.find({ recipient : currentUser, isRead : false}, (err,results) => {
+            if (err){
+                return console.log('Error has occurred: $(err)');
+            } else {
+                if(results.length){
+                    // console.log(results);
+                    console.log("you have unread messages");
+                    notifier.notify({
+                        title : 'JCU Career Link' ,
+                        message: 'You have received a new message' ,
+                        wait : true
+                    });
+
+                }else{
+                    console.log("You have no new messages");
+                }
+
+            }
+        })
+    },60000
+);
 module.exports = router ;
 
