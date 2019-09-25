@@ -215,11 +215,12 @@ router.get('/editJob', ensureAuthenticated, (req, res) => {
         }
         // Render the edit page with the current values for the advertisement in place.
         res.render('editJob', {
+            jobAdvertisementId: advertisement._id,
             businessName: advertisement.businessName,
             businessPhone: advertisement.businessPhone,
             businessEmail: advertisement.businessEmail,
-            jobTitle: advertisement.title,
-            jobDescription: advertisement.description,
+            jobTitle: advertisement.jobTitle,
+            jobDescription: advertisement.jobDescription,
             jobType: advertisement.jobType,
             jobAddress: advertisement.jobAddress,
             jobCity: advertisement.jobCity,
@@ -227,15 +228,17 @@ router.get('/editJob', ensureAuthenticated, (req, res) => {
             jobCountry: advertisement.jobCountry,
             remuneration: advertisement.remuneration,
         });
-
     });
 });
 
 // Edit Job - handle job edit request
 router.post('/editJob', ensureAuthenticated, (req, res) => {
-    console.log(`Request to edit job ad initiated.`);
+    let jobId = req.query.jobId;
+
+    console.log('Request to edit job ' + jobId + ' ad initiated.');
 
     const {
+        jobAdvertisementId,
         businessName,
         businessPhone,
         businessEmail,
@@ -267,6 +270,7 @@ router.post('/editJob', ensureAuthenticated, (req, res) => {
     if (errors.length > 0) {
         res.render('editJob', {
             errors,
+            jobAdvertisementId,
             businessName,
             businessPhone,
             businessEmail,
@@ -297,36 +301,54 @@ router.post('/editJob', ensureAuthenticated, (req, res) => {
                     res.render('editJob', {errors});
                 } else {
                     // Generate new JobAdvertisement object to be stored in the database
-                    const newJobAdvertisement = new JobAdvertisement({
-                        businessName,
-                        businessPhone,
-                        businessEmail,
-                        jobTitle,
-                        jobDescription,
-                        jobType,
-                        jobAddress,
-                        jobCity,
-                        jobState,
-                        jobCountry,
-                        remuneration,
-                        isCurrent,
-                        postedByUserID,
-                        postDate
-                    });
-                    // Force the email address to lower case before saving
-                    newJobAdvertisement.businessEmail = newJobAdvertisement.businessEmail.toLowerCase();
-                    newJobAdvertisement.isCurrent = true;
-                    newJobAdvertisement.postedByUserID = req.user._id;
-                    newJobAdvertisement.save()
-                        .then(user => {
-                            // Stores a message in Session that will be displayed after the redirect
+                    JobAdvertisement.findById(jobId, (err, result) => {
+                        if (err) {
+                            return console.log(`Error has occurred: ${err}`);
+                        }
+                        console.log(result.postedByUserID);
+                        console.log(req.user._id.toString());
+
+                        // Double checking the editor is the owner, just in case
+                        if (result.postedByUserID === req.user._id.toString()) {
+
+                            // Good to go. Set the values in the doc to match the new ones from the POST.
+                            // I would LOVE to know why I need the toString()!!
+                            result.businessName = req.body.businessName.toString();
+                            result.businessPhone = req.body.businessPhone.toString();
+                            result.businessEmail = req.body.businessEmail.toString();
+                            result.jobTitle = req.body.jobTitle.toString();
+                            result.jobDescription = req.body.jobDescription.toString();
+                            result.jobType = req.body.jobType.toString();
+                            result.jobAddress = req.body.jobAddress.toString();
+                            result.jobCity = req.body.jobCity.toString();
+                            result.jobState = req.body.jobState.toString();
+                            result.jobCountry = req.body.jobCountry.toString();
+                            result.remuneration = req.body.remuneration.toString();
+                            result.isCurrent = true;
+                            result.businessEmail = result.businessEmail.toLowerCase();
+
+                            // Change the last modified for tracking.
+                            result.lastModified = Date.now();
+
+                            // Save the updated document and send the user back to the main jobs page.
+                            result.save()
+                                .then(user => {
+                                    // Stores a message in Session that will be displayed after the redirect
+                                    req.flash(
+                                        'success_msg',
+                                        'Job advertisement modified successfully'
+                                    );
+                                    res.redirect('jobs');
+                                })
+                                .catch(err => console.log(err));
+                        } else {
                             req.flash(
                                 'success_msg',
-                                'Job advertisement modified successfully'
+                                'You attempted to edit an advertisement that is not yours!'
                             );
                             res.redirect('jobs');
-                        })
-                        .catch(err => console.log(err));
+                        }
+                    });
                 }
             })
     }
@@ -353,11 +375,12 @@ router.get('/job', ensureAuthenticated, function (req, res) {
 // Jobs - serve jobs page (all listings)
 router.get('/jobs', ensureAuthenticated, (req, res) => {
     console.log('Request made to open jobs page');
+
+    // Attempt to retrieve all JobAAdvertisements that are flagged as current, then pass to page and render.
     JobAdvertisement.find({"isCurrent": "true"}, (err, result) => {
         if (err) {
             return console.log(`Error has occurred: ${err}`);
         } else {
-            // console.log(result);
             res.render('jobs', {
                 user: req.user,
                 jobAds: result

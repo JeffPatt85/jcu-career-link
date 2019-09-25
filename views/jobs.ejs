@@ -47,7 +47,7 @@
                         <!-- These need to be cast to string for the comparison or ejs fails to retrieve the second value and we always get 'true' -->
                         <% if (jobAds[i].lastModified.toString() != jobAds[i].postDate.toString()) { %>
                             <div class="float-left mt-3">
-                                <i>Listing last modified:<%= jobAds[i].lastModified; %></i>
+                                <i>Listing last modified: <%= jobAds[i].lastModified; %></i>
                             </div>
                         <% } %>
                         <div class="float-right mt-3">
