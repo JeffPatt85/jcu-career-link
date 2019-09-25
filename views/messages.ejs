@@ -16,7 +16,12 @@
     table {
 
     }
-
+    .unread-message{
+        font-weight: bold;
+    }
+    .read-message{
+        font-weight: normal;
+    }
     td, th {
         border: 1px solid #dddddd;
         text-align: left;
@@ -49,33 +54,29 @@
                 </tr>
                 <% for(var i=0; i<userMessages.length; i++){ %>
                     <tr>
+                        <% if(!userMessages[i].isRead){ %>
+                            <th class="unread-message"><%= userMessages[i].sender%></th>
+                            <th class="unread-message"><%= userMessages[i].sentDate%></th>
+                            <th class="unread-message"><%= userMessages[i].content%></th>
+                            <%}else{%>
+                                <th class="read-message"><%= userMessages[i].sender%></th>
+                                <th class="read-message"><%= userMessages[i].sentDate%></th>
+                                <th class="read-message"><%= userMessages[i].content%></th>
+                               <%}%>
                      <% if(!userMessages[i].isRead){ %>
-                            <th style="font-weight: bold"><%= userMessages[i].sender%></th>
-                            <th style="font-weight: bold"><%= userMessages[i].sentDate%></th>
-                            <th style="font-weight: bold"><%= userMessages[i].content%></th>
                             <th class="mark-as-read-button">
                                 <form action="/messageManager/markMessageRead" method="post">
                                     <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
                                     <button>Mark as read</button>
                                 </form>
                             </th>
+                            <% } %>
                             <th class="delete-button">
                                 <form action="/messageManager/deleteMessage" method="post">
                                     <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
                                     <button>Delete</button>
                                 </form>
                             </th>
-                    <% }else{ %>
-                             <th><%= userMessages[i].sender%></th>
-                             <th><%= userMessages[i].sentDate%></th>
-                             <th><%= userMessages[i].content%></th>
-                             <th class="delete-button">
-                                 <form action="/messageManager/deleteMessage" method="post">
-                                     <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
-                                     <button>Delete</button>
-                                 </form>
-                             </th>
-                        <% } %>
                 </tr>
                 <% } %>
             </table>
