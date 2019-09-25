@@ -10,6 +10,7 @@ const app = express();
 
 const path = require('path');
 
+
 // Favicon for the sake of completeness
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
@@ -36,7 +37,7 @@ mongoose.connect(db, {
     .catch(err => console.log(err));
 
 // Declare port to be used
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 
 // EJS (Templating engine)
 app.use(expressLayouts);
@@ -77,3 +78,5 @@ app.use('/notificationManager', require('./routes/notificationManager'));
 app.use('/messageManager', require('./routes/messageManager'));
 // Establish server and listener
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
+
+

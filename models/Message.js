@@ -20,10 +20,6 @@ const MessageSchema = new mongoose.Schema({
     isRead : {
         type: Boolean,
         default : false
-    },
-    lastModified: {
-        type: Date,
-        required: true
     }
 });
 

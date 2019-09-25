@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <style>
+    .mark-as-read-button {
+        border-top: hidden;
+        border-bottom: hidden;
+        border-right: hidden;
+        background-color: white;
+    }
     table {
 
     }
@@ -10,11 +16,15 @@
         text-align: left;
         font-size: 10px;
         padding: 8px;
+        font-weight: normal;
     }
 
     tr:nth-child(even) {
         background-color: aliceblue;
     }
+
+
+
 </style>
 <body>
 <div class="row mt-5">
@@ -22,7 +32,7 @@
         <div class="card card-body">
             <%- include nav.ejs %>
             <h1 class="text-center mb-3">Messages</h1>
-            <% include ./partials/messages %>
+
             <p>
             <h1>Your messages</h1>
             <table>
@@ -32,16 +42,29 @@
                     <th>Message</th>
                 </tr>
                 <% for(var i=0; i<userMessages.length; i++){ %>
-                <tr>
-                    <th><%= userMessages[i].sender%></th>
-                    <th><%= userMessages[i].sentDate%></th>
-                    <th><%= userMessages[i].content%></th>
+                    <tr>
+                     <% if(!userMessages[i].isRead){ %>
+                            <th style="font-weight: bold"><%= userMessages[i].sender%></th>
+                            <th style="font-weight: bold"><%= userMessages[i].sentDate%></th>
+                            <th style="font-weight: bold"><%= userMessages[i].content%></th>
+                            <th class="mark-as-read-button">
+                                <form action="/messageManager/markMessageRead" method="post">
+                                    <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
+                                    <button>Mark as read</button>
+                                </form>
+                            </th>
+                    <% }else{ %>
+                             <th><%= userMessages[i].sender%></th>
+                             <th><%= userMessages[i].sentDate%></th>
+                             <th><%= userMessages[i].content%></th>
+                        <% } %>
                 </tr>
                 <% } %>
             </table>
             </p>
             <p>
             <h1>Send a message</h1>
+            <% include ./partials/messages.ejs %>
             <form action="/messageManager/sendMessage" method="post">
                 Recipient : <input type="text" name="recipient" value="">
                 <br>
@@ -50,12 +73,13 @@
                 <button>Send message</button>
             </form>
             </p>
-            <form action="/notificationManager/trigger" method="get">
-                <button>Get a notification</button>
-            </form>
+<!--            <form action="/notificationManager/trigger" method="get">-->
+<!--                <button>Get a notification</button>-->
+<!--            </form>-->
         </div> <!-- End card-body -->
         <%- include footer.ejs %>
     </div>
 </div>
+
 </body>
 </html>
