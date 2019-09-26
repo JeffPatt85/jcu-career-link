@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+
+</style>
+<body>
+<div class="row mt-5">
+    <div class="col-md-9 m-auto">
+        <div class="card card-body">
+<!--            <%- include nav.ejs %>-->
+            <p>
+            <h1>New Message</h1>
+            <% include ./partials/messages.ejs %>
+                <% let recipientString;%>
+<!--            <% if(messageRecipient){recipientString = messageRecipient}else{recipientString = ""}%>-->
+            <form action="/messageManager/sendMessage" method="post">
+                Recipient : <input type="text" name="recipient" value="<%=recipientString%>">
+                <br>
+                Message : <input type="text" name="content" value="">
+                <br>
+                <button>Send message</button>
+            </form>
+            </p>
+            <!--            <form action="/notificationManager/trigger" method="get">-->
+            <!--                <button>Get a notification</button>-->
+            <!--            </form>-->
+        </div> <!-- End card-body -->
+        <%- include footer.ejs %>
+    </div>
+</div>
+
+</body>
+</html>
