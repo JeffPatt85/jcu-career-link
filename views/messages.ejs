@@ -13,6 +13,12 @@
         border-right: hidden;
         background-color: white;
     }
+    .reply-button{
+        border-top: hidden;
+        border-bottom: hidden;
+        border-right: hidden;
+        background-color: white;
+    }
     table {
 
     }
@@ -46,6 +52,7 @@
 
             <p>
             <h1>Your messages</h1>
+            <% include ./partials/messages.ejs %>
             <table>
                 <tr>
                     <th>From</th>
@@ -71,6 +78,12 @@
                                 </form>
                             </th>
                             <% } %>
+                            <th class="reply-button">
+                                <form action="/messageManager/sendNewMessage" method="post">
+                                    <input type="hidden" id="recipient" name="recipient" value="<%=userMessages[i].recipient%>">
+                                <button>Reply</button>
+                                </form>
+                            </th>
                             <th class="delete-button">
                                 <form action="/messageManager/deleteMessage" method="post">
                                     <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
@@ -82,14 +95,9 @@
             </table>
             </p>
             <p>
-            <h1>Send a message</h1>
-            <% include ./partials/messages.ejs %>
-            <form action="/messageManager/sendMessage" method="post">
-                Recipient : <input type="text" name="recipient" value="">
-                <br>
-                Message : <input type="text" name="content" value="">
-                <br>
-                <button>Send message</button>
+
+            <form action="/messageManager/sendNewMessage" method="post">
+                <button>Send a message</button>
             </form>
             </p>
 <!--            <form action="/notificationManager/trigger" method="get">-->

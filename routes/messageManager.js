@@ -44,7 +44,7 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
 
     if (!recipient || !content) {
         req.flash('error_msg', "Please fill in all fields");
-        res.redirect('/messageManager/messages')
+        res.render('newMessage', {messageRecipient : recipient})
 
     } else {
         console.log("No form errors");
@@ -56,7 +56,7 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
                 if (!user) {
                     console.log("User doesn't exist");
                     req.flash('error_msg', "That user doesn't exist");
-                    res.redirect('/messageManager/messages')
+                    res.render('newMessage', {messageRecipient : recipient})
 
 
                 } else {
@@ -75,6 +75,8 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
                                 'success_msg',
                                 'You have sent ' + recipient + " a message"
                             );
+                            // res.redirect(req.getHeader());
+                            console.log(req.url);
                             res.redirect('/messageManager/messages')
                         });
                 }
@@ -83,10 +85,25 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
 
     }});
 
+//Loading the new message page with
+    router.post('/sendNewMessage', ensureAuthenticated, (req,res)=>{
+        console.log('Request made to open a new message page');
+        let messageRecipient;
+        if(!req.body.recipient){
+            // console.log("reply button not pressed");
+            messageRecipient = "";
+        }else{
+            // console.log("reply button pressed");
+            messageRecipient = req.body.recipient;
+            // console.log(messageRecipient);
+        }
+        res.render('newMessage', {user: req.user, messageRecipient: messageRecipient})
+    });
+
 // Loading the messages page
     router.get('/messages', ensureAuthenticated, (req, res) => {
         console.log('Request made to open messages page');
-        console.log(req.user.email);
+        // console.log(req.user.email);
         currentUser = req.user.email;
         Message.find({ recipient : req.user.email}, (err,results) => {
             if (err){
