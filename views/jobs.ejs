@@ -37,18 +37,17 @@
                         </div>
                     </div>
                     <ul class="list-unstyled">
-                        <li><%= jobAds[i].businessName %></li>
+                        <li><b><%= jobAds[i].businessName %></b></li>
                         <li><%= jobAds[i].jobCountry %> > <%= jobAds[i].jobState %> > <%= jobAds[i].jobCity %></li>
                         <li>Job Description: <%= jobAds[i].jobDescription; %></li>
                         <li>Job Type: <%= jobAds[i].jobType %></li>
                         <li>Posted: <%= jobAds[i].postDate %></li>
                     </ul>
                     <div class="clearfix">
-                        <% if (jobAds[i].lastModified != jobAds[i].postDate) { %>
+                        <!-- These need to be cast to string for the comparison or ejs fails to retrieve the second value and we always get 'true' -->
+                        <% if (jobAds[i].lastModified.toString() != jobAds[i].postDate.toString()) { %>
                             <div class="float-left mt-3">
-                                <i>Listing last modified:
-                                    <% jobAds[i].lastModified %>
-                                </i>
+                                <i>Listing last modified: <%= jobAds[i].lastModified; %></i>
                             </div>
                         <% } %>
                         <div class="float-right mt-3">
@@ -62,7 +61,7 @@
                         display!
                     </div>
                 <% } %>
+                <%- include footer.ejs %>
             </div> <!-- End card-body -->
-            <%- include footer.ejs %>
         </div>
     </div>

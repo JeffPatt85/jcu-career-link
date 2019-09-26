@@ -11,11 +11,12 @@
                         <li><a href="/profile">Profile</a></li>
                         <li><a href="/messageManager/messages">Messages</a></li>
                         <li><a href="/jobs">View All Jobs</a></li>
-                        <li><a href="/bookmarkedJobs">View Saved Jobs</a></li>
+                        <li><a href="/bookmarkedJobs">Bookmarked Jobs</a></li>
                         <% if (user.userType != 'student') { %>
                             <li><a href="/myJobs">View My Ads</a></li>
                             <li><a href="/createJob">Create Job Ad</a></li>
                         <% } %>
+                        <li><a href="/peers">Peer Profiles</a></li>
                         <li><a href="/test">Test</a></li>
                     </ul>
                 </div>
@@ -32,7 +33,7 @@
                     <p>Pikey a cracking taking the mick bit of a div, jellied eels. </p>
                 </div>
             </div>
+            <%- include footer.ejs %>
         </div> <!-- End card-body -->
-        <%- include footer.ejs %>
     </div>
 </div>

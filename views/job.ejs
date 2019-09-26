@@ -13,7 +13,7 @@
                     <div class="clearfix" id="job-title-section">
                         <div class="float-left">
                             <h3><%= jobAd.jobTitle %></h3>
-                            <h3><%= jobAd.businessName %></h3>
+                            <h4><%= jobAd.businessName %></h4>
                         </div>
                         <div class="float-right">
                             <% if (user._id == jobAd.postedByUserID) { %>
@@ -54,24 +54,8 @@
                             <dd><span><%= jobAd.jobDescription %></span></dd>
                         </dl>
                     </section>
-                    <hr/>
-                    <div class="jcuLink-job-options">
-                        <div class="col-md-6"></div>
-                        <div class="col-md-6"></div>
-                    </div>
-                    <div class="jcuLink-social-links text-center">
-                        <ul class="list-inline list-unstyled">
-                            <li class="list-inline-item"><a href="https://www.facebook.com"><i
-                                            class="fab fa-facebook-f"></i></a></li>
-                            <li class="list-inline-item"><a href="https://www.twitter.com"><i
-                                            class="fab fa-twitter"></i></a></li>
-                            <li class="list-inline-item"><a href="https:///www.linkedin.com"><i
-                                            class="fab fa-linkedin"></i></a>
-                            </li>
-                        </ul>
-                    </div> <!-- End jcuLinks-social-links -->
                 </div>
-            </div> <!-- End card-body -->
-        </div>
-        <%- include footer.ejs %>
+            </div>
+            <%- include footer.ejs %>
+        </div><!-- End card-body -->
     </div>

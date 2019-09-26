@@ -4,7 +4,7 @@
             <%- include nav.ejs %>
             <h1 class="text-center mb-3">Edit job advertisement</h1>
             <% include ./partials/messages %>
-            <form action="/editJob" method="POST">
+            <form action="/editJob?jobId=<%= jobAdvertisementId %>" method="POST">
                 <div class="form-group">
                     <label for="businessName">Business Name</label>
                     <input type="text" id="businessName" name="businessName" class="form-control"
@@ -68,10 +68,10 @@
                            value="<%= typeof remuneration != 'undefined' ? remuneration : '' %>"/>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">
-                    Register
+                    Save Changes
                 </button>
             </form>
+            <%- include footer.ejs %>
         </div> <!-- End card-body -->
-        <%- include footer.ejs %>
     </div>
 </div>

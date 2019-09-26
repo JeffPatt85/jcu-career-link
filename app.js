@@ -31,8 +31,8 @@ require('./config/passport')(passport);
 
 // Connect to Mongo using Mongoose
 mongoose.connect(db, {
-        useNewUrlParser: true
-    })
+    useNewUrlParser: true
+})
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
@@ -45,7 +45,7 @@ app.set('view engine', 'ejs');
 
 // Set up Bodyparser for handling input
 app.use(express.urlencoded({
-    extended: false
+    extended: true
 }));
 
 // Express session
@@ -56,6 +56,8 @@ app.use(
         saveUninitialized: true
     }));
 
+app.use(express.json());
+
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
@@ -64,7 +66,7 @@ app.use(passport.session());
 app.use(flash());
 
 // Global variables
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
@@ -76,6 +78,7 @@ app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/notificationManager', require('./routes/notificationManager'));
 app.use('/messageManager', require('./routes/messageManager'));
+
 // Establish server and listener
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
 

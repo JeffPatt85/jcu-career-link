@@ -60,7 +60,7 @@ const JobAdvertisementSchema = new mongoose.Schema({
     lastModified: {
         type: Date,
         default: Date.now
-    }
+    },
 });
 
 const JobAdvertisement = mongoose.model('JobAdvertisement', JobAdvertisementSchema);

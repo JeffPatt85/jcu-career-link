@@ -2,10 +2,20 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <p></p>
-                <p></p>
-                <% let year = (new Date()).getFullYear() %>
-                <p style="float:right;">&copy;<%= year %> jcucareerlink.com.au</p>
+                <hr/>
+                <div class="jcuLink-social-links text-center"> <!-- Start jcuLinks-social-links -->
+                    <ul class="list-inline list-unstyled">
+                        <li class="list-inline-item"><a href="https://www.facebook.com"><i
+                                        class="fab fa-facebook-f"></i></a></li>
+                        <li class="list-inline-item"><a href="https://www.twitter.com"><i
+                                        class="fab fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="https:///www.linkedin.com"><i
+                                        class="fab fa-linkedin"></i></a>
+                        </li>
+                    </ul>
+                    <% let year = (new Date()).getFullYear() %>
+                    <span>&copy;<%= year %> jcucareerlink.com.au</span>
+                </div> <!-- End jcuLinks-social-links -->
             </div>
         </div>
     </div>
