@@ -20,7 +20,9 @@ const MessageSchema = new mongoose.Schema({
     isRead : {
         type: Boolean,
         default : false
-    },
+
+    }
+
 });
 
 const Message = mongoose.model('Message', MessageSchema);

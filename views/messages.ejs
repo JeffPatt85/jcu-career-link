@@ -1,20 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <style>
+    .mark-as-read-button {
+        border-top: hidden;
+        border-bottom: hidden;
+        border-right: hidden;
+        background-color: white;
+    }
+    .delete-button{
+        border-top: hidden;
+        border-bottom: hidden;
+        border-right: hidden;
+        background-color: white;
+    }
+    .reply-button{
+        border-top: hidden;
+        border-bottom: hidden;
+        border-right: hidden;
+        background-color: white;
+    }
     table {
 
     }
-
+    .unread-message{
+        font-weight: bold;
+    }
+    .read-message{
+        font-weight: normal;
+    }
     td, th {
         border: 1px solid #dddddd;
         text-align: left;
         font-size: 10px;
         padding: 8px;
+        font-weight: normal;
     }
 
     tr:nth-child(even) {
         background-color: aliceblue;
     }
+
+
+
 </style>
 <body>
 <div class="row mt-5">
@@ -22,38 +49,67 @@
         <div class="card card-body">
             <%- include nav.ejs %>
             <h1 class="text-center mb-3">Messages</h1>
-            <% include ./partials/messages %>
+
             <p>
             <h1>Your messages</h1>
+            <% include ./partials/messages.ejs %>
             <table>
                 <tr>
                     <th>From</th>
                     <th>Date</th>
                     <th>Message</th>
                 </tr>
-                <tr>
-                    <th>Bilbo Baggins</th>
-                    <th>A long time ago</th>
-                    <th>Hey Gandalf, just sending this to let you know that I've found a ring</th>
+                <% for(var i=0; i<userMessages.length; i++){ %>
+                    <tr>
+                        <% if(!userMessages[i].isRead){ %>
+                            <th class="unread-message"><%= userMessages[i].sender%></th>
+                            <th class="unread-message"><%= userMessages[i].sentDate%></th>
+                            <th class="unread-message"><%= userMessages[i].content%></th>
+                            <%}else{%>
+                                <th class="read-message"><%= userMessages[i].sender%></th>
+                                <th class="read-message"><%= userMessages[i].sentDate%></th>
+                                <th class="read-message"><%= userMessages[i].content%></th>
+                               <%}%>
+                     <% if(!userMessages[i].isRead){ %>
+                            <th class="mark-as-read-button">
+                                <form action="/messageManager/markMessageRead" method="post">
+                                    <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
+                                    <button>Mark as read</button>
+                                </form>
+                            </th>
+                            <% } %>
+                            <th class="reply-button">
+                                <form action="/messageManager/sendNewMessage" method="post">
+                                    <input type="hidden" id="recipient" name="recipient" value="<%=userMessages[i].recipient%>">
+                                <button>Reply</button>
+                                </form>
+                            </th>
+                            <th class="delete-button">
+                                <form action="/messageManager/deleteMessage" method="post">
+                                    <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
+                                    <button>Delete</button>
+                                </form>
+                            </th>
                 </tr>
+                <% } %>
             </table>
             </p>
             <p>
-            <h1>Send a message</h1>
-            <form action="/messageManager/sendMessage" method="post">
-                Recipient : <input type="text" name="recipient" value="">
-                <br>
-                Message : <input type="text" name="content" value="">
-                <br>
-                <button>Send message</button>
+
+            <form action="/messageManager/sendNewMessage" method="post">
+                <button>Send a message</button>
             </form>
             </p>
-            <form action="/notificationManager/trigger" method="get">
-                <button>Get a notification</button>
-            </form>
+
             <%- include footer.ejs %>
+
+<!--            <form action="/notificationManager/trigger" method="get">-->
+<!--                <button>Get a notification</button>-->
+<!--            </form>-->
+
         </div> <!-- End card-body -->
     </div>
 </div>
+
 </body>
 </html>
