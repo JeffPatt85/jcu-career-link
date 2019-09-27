@@ -45,10 +45,10 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    lastModified: {
-        type: Date,
-        required: true
-    }
+    // lastModified: {
+    //     type: Date,
+    //     required: true
+    // }
 });
 
 const User = mongoose.model('User', UserSchema);

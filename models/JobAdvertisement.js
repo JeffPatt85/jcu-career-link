@@ -46,7 +46,7 @@ const JobAdvertisementSchema = new mongoose.Schema({
         required: false
     },
     isCurrent: {
-        type: String,
+        type: Boolean,
         required: true
     },
     postedByUserID: {

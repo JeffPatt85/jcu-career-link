@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const EndorsementSchema = new mongoose.Schema({
+const RecommendationSchema = new mongoose.Schema({
     studentUserID: {
         type: String,
         required: true
@@ -27,6 +27,6 @@ const EndorsementSchema = new mongoose.Schema({
     }
 });
 
-const Endorsement = mongoose.model('Endorsement', EndorsementSchema);
+const Recommendation = mongoose.model('Recommendation', RecommendationSchema);
 
-module.exports = Endorsement;
+module.exports = Recommendation;
