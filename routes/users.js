@@ -71,7 +71,8 @@ router.post('/register', (req, res) => {
         });
     } else {
         // Validation passed
-        let lastModified;
+        // Defined last modified
+        // let lastModified;
         User.findOne({
             email: email
         })
@@ -99,15 +100,16 @@ router.post('/register', (req, res) => {
                         email,
                         phone,
                         userType,
-                        password,
-                        lastModified
+                        password
+                        // ,
+                        // lastModified
                     });
 
                     // Force the email address to lower case before saving
                     newUser.email = newUser.email.toLowerCase();
 
                     // Best set the lastModified so there's no issues.
-                    newUser.lastModified = Date.now;
+                    // newUser.lastModified = Date.now;
 
                     // Salt the password before saving new User object to database
                     bcrypt.genSalt(10, (err, salt) => {
