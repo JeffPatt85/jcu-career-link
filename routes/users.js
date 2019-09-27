@@ -71,7 +71,7 @@ router.post('/register', (req, res) => {
         });
     } else {
         // Validation passed
-
+        let lastModified;
         User.findOne({
             email: email
         })
@@ -122,6 +122,7 @@ router.post('/register', (req, res) => {
                                         'success_msg',
                                         'You are now registered and can log in'
                                     );
+                                    console.log("You;ve ")
                                     res.redirect('/users/login');
                                 })
                                 .catch(err => console.log(err));
