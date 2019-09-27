@@ -44,10 +44,13 @@ const UserSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
-    },
+    }
+    // ,
+
     // lastModified: {
     //     type: Date,
-    //     required: true
+    //     required: true,
+    //
     // }
 });
 
