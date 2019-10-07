@@ -2,21 +2,22 @@
     <div class="col-md-9 m-auto">
         <div class="card card-body">
             <%- include nav.ejs %>
-            <h1 class="text-center mb-3">Dashboard</h1>
+             <h1 class="text-center mb-3">Dashboard</h1>
             <% include ./partials/messages %>
             <p class="lead mb-3">Welcome <%= user.firstName %></p>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 float-left">
                     <ul class="list-unstyled">
                         <li><a href="/profile">Profile</a></li>
                         <li><a href="/messageManager/messages">Messages</a></li>
-                        <li><a href="/jobs">View All Jobs</a></li>
-                        <li><a href="/bookmarkedJobs">Bookmarked Jobs</a></li>
+                        <li><a href="/jobs/1">View All Jobs</a></li>
+                        <li><a href="/bookmarkedJobs/1">Bookmarked Jobs</a></li>
                         <% if (user.userType != 'student') { %>
                             <li><a href="/myJobs">View My Ads</a></li>
                             <li><a href="/createJob">Create Job Ad</a></li>
                         <% } %>
-                        <li><a href="/peers">Peer Profiles</a></li>
+
+                        <li><a href="/peers">Peers</a></li>
                         <li><a href="/test">Test</a></li>
                     </ul>
                 </div>

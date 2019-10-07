@@ -45,7 +45,7 @@ router.get('/bookmarkJob', ensureAuthenticated, function (req, res) {
                     'success_msg',
                     'Bookmark removed successfully'
                 );
-                res.redirect('jobs');
+                res.redirect('jobs/1');
             } else {
                 bookmarkedJobs.isCurrent = true;
                 bookmarkedJobs.lastModified = Date.now();
@@ -58,7 +58,7 @@ router.get('/bookmarkJob', ensureAuthenticated, function (req, res) {
                     'success_msg',
                     'Bookmark added successfully'
                 );
-                res.redirect('jobs');
+                res.redirect('jobs/1');
             }
         } else {
             // If we reach this point there is no entries that match, and it's time to make one.
@@ -80,12 +80,85 @@ router.get('/bookmarkJob', ensureAuthenticated, function (req, res) {
                         'success_msg',
                         'Advertisement bookmarked successfully'
                     );
-                    res.redirect('jobs');
+                    res.redirect('jobs/1');
                 })
                 .catch(err => console.log(err));
         }
     });
 });
+
+
+// BookmarkedJobs - serve page
+router.get('/bookmarkedJobs/:page', ensureAuthenticated, function (req, res, next) {
+    let currentPage = parseInt(req.params.page) || 1;
+
+    // Attempt to retrieve all JobAAdvertisements that are flagged as current, then pass to page and render.
+    JobAdvertisement.find({"isCurrent": true}, (err, result) => {
+        if (err) {
+            return console.log(`Error has occurred: ${err}`);
+        }
+        BookmarkedJob.find({
+            "bookmarkedByUserID": req.user._id,
+            "isCurrent": true,
+        }, (err, bookmarkedJobs) => {
+            if (err) {
+                return console.log(`Error has occurred: ${err}`);
+            }
+            // Check for bookmarks. If none are present we set activeBookmarks to false to save time rendering
+            // results on the client side.
+            if (!bookmarkedJobs.length) {
+                console.log('No bookmarks for current jobs found for this user.');
+                let activeBookmarks = false;
+                res.render('bookmarkedJobs', {
+                    user: req.user,
+                    jobAds: result,
+                    activeBookmarks: activeBookmarks
+                });
+            } else {
+                if (bookmarkedJobs) {
+
+                    let bookmarkedJobAds = [];
+
+                    console.log(`Meow`);
+                    for (let i = 0; i < bookmarkedJobs.length; i++) {
+                        let bookmarkedJobId = bookmarkedJobs[i].jobAdvertisementId.toString();
+                        let matchingJobAdPosition = result.findIndex(x => x.id === bookmarkedJobId);
+
+                        if (matchingJobAdPosition !== -1) {
+                            console.log(`Matching valid ad found for bookmark`);
+                            result[matchingJobAdPosition][`activeBookmark`] = true;
+                            bookmarkedJobAds.push(result[matchingJobAdPosition]);
+                        }
+                    }
+                    //set default variables
+                    let numBookmarkedJobAds = bookmarkedJobAds.length,
+                        perPage = 5,
+                        pageCount = Math.ceil(numBookmarkedJobAds / perPage),
+                        bookmarkedJobAdsArrays = [],
+                        bookmarkedJobAdsList;
+
+                    //split list into groups
+                    while (bookmarkedJobAds.length > 0) {
+                        bookmarkedJobAdsArrays.push(bookmarkedJobAds.splice(0, perPage));
+                    }
+                    //show list of bookmarkedJobAds from group
+                    bookmarkedJobAdsList = bookmarkedJobAdsArrays[+currentPage - 1];
+
+                    //render index.ejs view file
+                    res.render(`bookmarkedJobs`, {
+                        user: req.user,
+                        jobAds: bookmarkedJobAdsList,
+                        perPage: perPage,
+                        numJobAds: numBookmarkedJobAds,
+                        pageCount: pageCount,
+                        currentPage: currentPage
+                    });
+                }
+            }
+        });
+    });
+});
+
 
 // Create Job - serve page
 router.get('/createJob', ensureAuthenticated, (req, res) => {
@@ -155,7 +228,7 @@ router.post('/createJob', ensureAuthenticated, (req, res) => {
             .then(user => {
                 if (!user) {
                     errors.push({
-                        msg: "You don't seem ot have a valid account"
+                        msg: "You don't seem to have a valid account"
                     });
                     console.log("Attempt made to create job ad by user with no matching user id in db");
                     res.render('createJob', {errors});
@@ -247,7 +320,7 @@ router.get('/deleteJob', ensureAuthenticated, (req, res) => {
                                     'success_msg',
                                     'Job archived/deleted successfully'
                                 );
-                                res.redirect('jobs');
+                                res.redirect('jobs/1');
                             })
                             .catch(err => console.log(err));
                     } else {
@@ -255,7 +328,7 @@ router.get('/deleteJob', ensureAuthenticated, (req, res) => {
                             'success_msg',
                             'You attempted to delete an advertisement that is not yours!'
                         );
-                        res.redirect('jobs');
+                        res.redirect('jobs/1');
                     }
                 });
             }
@@ -398,7 +471,7 @@ router.post('/editJob', ensureAuthenticated, (req, res) => {
                                         'success_msg',
                                         'Job advertisement modified successfully'
                                     );
-                                    res.redirect('jobs');
+                                    res.redirect('jobs/1');
                                 })
                                 .catch(err => console.log(err));
                         } else {
@@ -406,7 +479,7 @@ router.post('/editJob', ensureAuthenticated, (req, res) => {
                                 'success_msg',
                                 'You attempted to edit an advertisement that is not yours!'
                             );
-                            res.redirect('jobs');
+                            res.redirect('jobs/1');
                         }
                     });
                 }
@@ -423,37 +496,125 @@ router.get('/job', ensureAuthenticated, function (req, res) {
     JobAdvertisement.findById(jobId, (err, result) => {
         if (err) {
             return console.log(`Error has occurred: ${err}`);
-        } else {
-
-            let bookmarks = BookmarkedJob.find(req.user._id);
-
-            console.log(req.user._id);
-            console.log('meow');
-            console.log(bookmarks.toString());
-
-            res.render('job', {
-                user: req.user,
-                jobAd: result,
-                bookmarks: bookmarks,
-            });
         }
+        BookmarkedJob.find({
+            "bookmarkedByUserID": req.user._id,
+            "isCurrent": true,
+            "jobAdvertisementId": jobId
+        }, (err, bookmarkedJobs) => {
+            if (err) {
+                return console.log(`Error has occurred: ${err}`);
+            }
+            // If there's current bookmarks we want to add a new value to each of the matching ads so rendering on
+            // user end is faster, and cleaner with less data transferred.
+            if (!bookmarkedJobs.length) {
+                result['activeBookmark'] = false;
+                res.render('job', {
+                    user: req.user,
+                    jobAd: result,
+                });
+            } else {
+                if (result._id.toString() === bookmarkedJobs[0].jobAdvertisementId.toString()) {
+                    result['activeBookmark'] = true;
+                    res.render('job', {
+                        user: req.user,
+                        jobAd: result,
+                    });
+                }
+            }
+        });
     });
 });
 
 // Jobs - serve jobs page (all listings)
-router.get('/jobs', ensureAuthenticated, (req, res) => {
+router.get('/jobs/:page', ensureAuthenticated, (req, res) => {
+    let currentPage = parseInt(req.params.page) || 1;
+
     console.log('Request made to open jobs page');
 
     // Attempt to retrieve all JobAAdvertisements that are flagged as current, then pass to page and render.
-    JobAdvertisement.find({"isCurrent": "true"}, (err, result) => {
+    JobAdvertisement.find({"isCurrent": true}, (err, result) => {
         if (err) {
             return console.log(`Error has occurred: ${err}`);
-        } else {
-            res.render('jobs', {
-                user: req.user,
-                jobAds: result
-            });
         }
+        BookmarkedJob.find({
+            "bookmarkedByUserID": req.user._id,
+            "isCurrent": true,
+        }, (err, bookmarkedJobs) => {
+            if (err) {
+                return console.log(`Error has occurred: ${err}`);
+            }
+            // Check for bookmarks. If none are present we set activeBookmarks to false to save time rendering
+            // results on the client side.
+            if (!bookmarkedJobs.length) {
+                console.log('No bookmarks found when checking for jobs display.');
+                //set default variables
+                let activeBookmarks = false;
+                let numJobAds = result.length,
+                    perPage = 5,
+                    pageCount = Math.ceil(numJobAds / perPage),
+                    resultArrays = [],
+                    resultList;
+
+                //split list into groups
+                while (result.length > 0) {
+                    resultArrays.push(result.splice(0, perPage));
+                }
+                //show list of result from group
+                resultList = resultArrays[+currentPage - 1];
+
+                //render index.ejs view file
+                res.render(`jobs`, {
+                    user: req.user,
+                    jobAds: resultList,
+                    perPage: perPage,
+                    numJobAds: numJobAds,
+                    pageCount: pageCount,
+                    currentPage: currentPage,
+                    activeBookmarks: activeBookmarks,
+                });
+            } else {
+                if (bookmarkedJobs) {
+                    console.log(`Meow`);
+                    for (let i = 0; i < bookmarkedJobs.length; i++) {
+                        let bookmarkedJobId = bookmarkedJobs[i].jobAdvertisementId.toString();
+                        let matchingJobAdPosition = result.findIndex(x => x.id === bookmarkedJobId);
+
+                        if (matchingJobAdPosition !== -1) {
+                            console.log(`Matching valid ad found for bookmark`);
+                            result[matchingJobAdPosition]["activeBookmark"] = true;
+                        } else {
+                            console.log(`Matching ad not found for bookmark. Likely deleted ad with id: ` + bookmarkedJobId);
+                        }
+                    }
+                    //set default variables
+                    let activeBookmarks = true;
+                    let numJobAds = result.length,
+                        perPage = 5,
+                        pageCount = Math.ceil(numJobAds / perPage),
+                        resultArrays = [],
+                        resultList;
+
+                    //split list into groups
+                    while (result.length > 0) {
+                        resultArrays.push(result.splice(0, perPage));
+                    }
+                    //show list of result from group
+                    resultList = resultArrays[+currentPage - 1];
+
+                    //render index.ejs view file
+                    res.render(`jobs`, {
+                        user: req.user,
+                        jobAds: resultList,
+                        perPage: perPage,
+                        numJobAds: numJobAds,
+                        pageCount: pageCount,
+                        currentPage: currentPage,
+                        activeBookmarks: activeBookmarks,
+                    });
+                }
+            }
+        });
     });
 });
 

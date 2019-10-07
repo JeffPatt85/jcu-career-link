@@ -19,3 +19,7 @@
     -o-filter: brightness(70%);
     filter: brightness(70%);
 }
+
+.jcuLink-dash-icon {
+    width: 16px;
+}

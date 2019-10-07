@@ -1,19 +1,15 @@
 const mongoose = require('mongoose');
 
-const RecommendationSchema = new mongoose.Schema({
+const RegisterOfInterestSchema = new mongoose.Schema({
     studentUserID: {
         type: String,
         required: true
     },
-    lecturerUserID: {
+    jobAdvertisementID: {
         type: String,
         required: true
     },
-    jobAdvertisementID: {
-      type: String,
-      required: true
-    },
-    lecturerComments: {
+    studentComments: {
         type: String,
         required: false
     },
@@ -31,6 +27,6 @@ const RecommendationSchema = new mongoose.Schema({
     }
 });
 
-const Recommendation = mongoose.model('Recommendation', RecommendationSchema);
+const RegisterOfInterest = mongoose.model('RegisterOfInterest', RegisterOfInterestSchema);
 
-module.exports = Recommendation;
+module.exports = RegisterOfInterest;

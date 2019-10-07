@@ -3,15 +3,22 @@
         <div class="card card-body">
             <%- include nav.ejs %>
             <h1 class="text-center mb-3"></h1>
+            <% include ./partials/messages %>
+
             <% if (jobAds.length >= 1) { %>
-                <% include ./partials/messages %>
-                    <% for (var i = 0; i < jobAds.length; i++) { %>
-                        <% if (user._id == jobAds[i].postedByUserID) { %>
+                    <!-- Start of activeBookmarks block -->
+                    <% if (activeBookmarks === true) { %>
+
+                        <% console.log(`Entered the activeBookmarks logic block`); %>
+
+                        <% for (var i = 0; i < jobAds.length; i++) { %>
+                            <% if (user._id == jobAds[i].postedByUserID) { %>
             <div class="col-md-12 m-auto border border-secondary rounded-sm mt-4 p-3">
                 <p><em><i>You posted this job advertisement</i></em></p>
                 <% } else { %>
                 <div class="col-md-12 m-auto border rounded-sm mt-4 p-3">
                     <% } %>
+                    <% let bookmarked = jobAds[i].hasOwnProperty('activeBookmark'); %>
                     <div class="clearfix">
                         <div class="float-left">
                             <h3 class="border border-right-0 border-bottom-0 border-top-0 border-primary pl-1">
@@ -29,9 +36,14 @@
                                                         href="/editJob?jobId=<%= jobAds[i]._id %>"><i
                                                             class="far fa-edit"></i></a></h4></li>
                                     <% } %>
-                                    <li class="list-inline-item" title="Bookmark Job Ad"><h4><a
-                                                    href="/bookmarkJob?jobId=<%= jobAds[i]._id %>"><i
-                                                        class="far fa-bookmark"></i></a></h4></li>
+                                    <li class="list-inline-item" title="Bookmark Job Ad"><h4>
+                                            <a href="/bookmarkJob?jobId=<%= jobAds[i]._id %>">
+                                                <% if (bookmarked) { %>
+                                                    <i class="fas fa-bookmark"></i>
+                                                <% } else { %>
+                                                    <i class="far fa-bookmark"></i>
+                                                <% } %>
+                                            </a></h4></li>
                                 </ul>
                             <% } %>
                             <% if (user.userType === 'student') { %>
@@ -39,9 +51,14 @@
                                     <li class="list-inline-item" title="Register Your Interest"><h4><a
                                                     href="/registerInterest?jobId=<%= jobAds[i]._id %>"><i
                                                         class="fas fa-file-import"></i></a></h4></li>
-                                    <li class="list-inline-item" title="Bookmark Job Ad"><h4><a
-                                                    href="/bookmarkJob?jobId=<%= jobAds[i]._id %>"><i
-                                                        class="far fa-bookmark"></i></a></h4></li>
+                                    <li class="list-inline-item" title="Bookmark Job Ad"><h4>
+                                            <a href="/bookmarkJob?jobId=<%= jobAds[i]._id %>">
+                                                <% if (bookmarked) { %>
+                                                    <i class="fas fa-bookmark"></i>
+                                                <% } else { %>
+                                                    <i class="far fa-bookmark"></i>
+                                                <% } %>
+                                            </a></h4></li>
                                 </ul>
                             <% } %>
                             <% if (user.userType === 'lecturer') { %>
@@ -57,9 +74,14 @@
                                                         href="/editJob?jobId=<%= jobAds[i]._id %>"><i
                                                             class="far fa-edit"></i></a></h4></li>
                                     <% } %>
-                                    <li class="list-inline-item" title="Bookmark Job Ad"><h4><a
-                                                    href="/bookmarkJob?jobId=<%= jobAds[i]._id %>"><i
-                                                        class="far fa-bookmark"></i></a></h4></li>
+                                    <li class="list-inline-item" title="Bookmark Job Ad"><h4>
+                                            <a href="/bookmarkJob?jobId=<%= jobAds[i]._id %>">
+                                                <% if (bookmarked) { %>
+                                                    <i class="fas fa-bookmark"></i>
+                                                <% } else { %>
+                                                    <i class="far fa-bookmark"></i>
+                                                <% } %>
+                                            </a></h4></li>
                                 </ul>
                             <% } %>
                         </div>
@@ -84,22 +106,145 @@
                     </div>
                 </div>
                 <% } %>
-                <% } else { %>
-                    <div class="col-md-12 m-auto border rounded-sm mt-4 p-3">There are no job advertisements to
-                        display!
+                <% } else { %><!-- End of activeBookmarks block -->
+
+                <% console.log(`Entered the no activeBookmarks logic block`); %>
+
+                <!-- Start of !activeBookmarks block -->
+                <% for (var j = 0; j < jobAds.length; j++) { %>
+                    <% if (user._id == jobAds[j].postedByUserID) { %>
+                <div class="col-md-12 m-auto border border-secondary rounded-sm mt-4 p-3">
+                    <p><em><i>You posted this job advertisement</i></em></p>
+                    <% } else { %>
+                    <div class="col-md-12 m-auto border rounded-sm mt-4 p-3">
+                        <% } %>
+                        <div class="clearfix">
+                            <div class="float-left">
+                                <h3 class="border border-right-0 border-bottom-0 border-top-0 border-primary pl-1">
+                                    <a href="/job?jobId=<%= jobAds[j]._id %>"><%= (jobAds[j].jobTitle); %></a>
+                                </h3>
+                            </div>
+                            <div class="float-right">
+                                <% if (user.userType === 'employer') { %>
+                                    <ul class="list-unstyled">
+                                        <% if (user._id == jobAds[j].postedByUserID) { %>
+                                            <li class="list-inline-item delete-job" title="Delete Job Ad"><h4><a
+                                                            href="/deleteJob?jobId=<%= jobAds[j]._id %>"><i
+                                                                class="far fa-trash-alt"></i></a></h4></li>
+                                            <li class="list-inline-item" title="Edit Job Ad"><h4><a
+                                                            href="/editJob?jobId=<%= jobAds[j]._id %>"><i
+                                                                class="far fa-edit"></i></a></h4></li>
+                                        <% } %>
+                                        <li class="list-inline-item" title="Bookmark Job Ad"><h4><a
+                                                        href="/bookmarkJob?jobId=<%= jobAds[j]._id %>"><i
+                                                            class="far fa-bookmark"></i></a></h4></li>
+                                    </ul>
+                                <% } %>
+                                <% if (user.userType === 'student') { %>
+                                    <ul class="list-unstyled">
+                                        <li class="list-inline-item" title="Register Your Interest"><h4><a
+                                                        href="/registerInterest?jobId=<%= jobAds[j]._id %>"><i
+                                                            class="fas fa-file-import"></i></a></h4></li>
+                                        <li class="list-inline-item" title="Bookmark Job Ad"><h4><a
+                                                        href="/bookmarkJob?jobId=<%= jobAds[j]._id %>"><i
+                                                            class="far fa-bookmark"></i></a></h4></li>
+                                    </ul>
+                                <% } %>
+                                <% if (user.userType === 'lecturer') { %>
+                                    <ul class="list-unstyled">
+                                        <li class="list-inline-item" title="Recommend a student"><h4><a
+                                                        href="/recommendStudent?jobId=<%= jobAds[j]._id %>"><i
+                                                            class="fas fa-user-tag"></i></a></h4></li>
+                                        <% if (user._id == jobAds[j].postedByUserID) { %>
+                                            <li class="list-inline-item delete-job" title="Delete Job Ad"><h4><a
+                                                            href="/deleteJob?jobId=<%= jobAds[j]._id %>"><i
+                                                                class="far fa-trash-alt"></i></a></h4></li>
+                                            <li class="list-inline-item" title="Edit Job Ad"><h4><a
+                                                            href="/editJob?jobId=<%= jobAds[j]._id %>"><i
+                                                                class="far fa-edit"></i></a></h4></li>
+                                        <% } %>
+                                        <li class="list-inline-item" title="Bookmark Job Ad"><h4><a
+                                                        href="/bookmarkJob?jobId=<%= jobAds[j]._id %>"><i
+                                                            class="far fa-bookmark"></i></a></h4></li>
+                                    </ul>
+                                <% } %>
+                            </div>
+                        </div>
+                        <ul class="list-unstyled">
+                            <li><b><%= jobAds[j].businessName %></b></li>
+                            <li><%= jobAds[j].jobCountry %> > <%= jobAds[j].jobState %> > <%= jobAds[j].jobCity %></li>
+                            <li>Job Description: <%= jobAds[j].jobDescription; %></li>
+                            <li>Job Type: <%= jobAds[j].jobType %></li>
+                            <li>Posted: <%= jobAds[j].postDate %></li>
+                        </ul>
+                        <div class="clearfix">
+                            <!-- These need to be cast to string for the comparison or ejs fails to retrieve the second value and we always get 'true' -->
+                            <% if (jobAds[j].lastModified.toString() != jobAds[j].postDate.toString()) { %>
+                                <div class="float-left mt-3">
+                                    <i>Listing last modified: <%= jobAds[j].lastModified; %></i>
+                                </div>
+                            <% } %>
+                            <div class="float-right mt-3">
+                                <a href="/job?jobId=<%= jobAds[j]._id %>">More details..</a>
+                            </div>
+                        </div>
                     </div>
-                <% } %>
-                <%- include footer.ejs %>
-            </div> <!-- End card-body -->
+                    <% } %>
+                    <% } %>
+                    <!-- End of !activeBookmarks block -->
+                    <% if (pageCount > 0) { %> <!-- Start of pagination block. -->
+                    <div class="row">
+                        <div class="text-center pt-4 mx-auto">
+                            <ul class="pagination text-center">
+                                <% if (currentPage == 1) { %>
+                                    <li class="page-item disabled"><a class="page-link">First</a></li>
+                                <% } else { %>
+                                    <li class="page-item"><a class="page-link" href="/jobs/1">First</a>
+                                    </li>
+                                <% } %>
+                                <% var k = (Number(currentPage) > 5 ? Number(currentPage) - 4 : 1) %>
+                                <% if (k !== 1) { %>
+                                    <li class="page-item disabled"><a class="page-link">...</a></li>
+                                <% } %>
+                                <% for (; k <= (Number(currentPage) + 4) && k <= pageCount; k++) { %>
+                                    <% if (k == currentPage) { %>
+                                        <li class="page-item active"><a class="page-link"><%= k %></a></li>
+                                    <% } else { %>
+                                        <li class="page-item"><a class="page-link"
+                                                                 href="/jobs/<%= k %>"><%= k %></a>
+                                        </li>
+                                    <% } %>
+                                    <% if (k == Number(currentPage) + 4 && k < pageCount) { %>
+                                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                                    <% } %>
+                                <% } %>
+                                <% if (currentPage == pageCount) { %>
+                                    <li class="page-item disabled"><a class="page-link">Last</a></li>
+                                <% } else { %>
+                                    <li class="page-item"><a class="page-link"
+                                                             href="/jobs/<%= pageCount %>">Last</a></li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                    <% } %>
+                    <!-- End of pagination block. -->
+                    <% } else { %>
+                        <div class="col-md-12 m-auto border rounded-sm mt-4 p-3">There are no job advertisements to
+                            display!
+                        </div>
+                    <% } %>
+                    <%- include footer.ejs %>
+                </div> <!-- End card-body -->
+            </div>
         </div>
-    </div>
-    <script type="text/javascript">
-        let elems = document.getElementsByClassName('delete-job');
-        let confirmIt = function (e) {
-            if (!confirm('Are you sure? The job advertisement will be removed from service permanently!')) e.preventDefault();
-        };
-        let i = 0, l = elems.length;
-        for (; i < l; i++) {
-            elems[i].addEventListener('click', confirmIt, false);
-        }
-    </script>
+        <script type="text/javascript">
+            let elems = document.getElementsByClassName('delete-job');
+            let confirmIt = function (e) {
+                if (!confirm('Are you sure? The job advertisement will be removed from service permanently!')) e.preventDefault();
+            };
+            let i = 0, l = elems.length;
+            for (; i < l; i++) {
+                elems[i].addEventListener('click', confirmIt, false);
+            }
+        </script>

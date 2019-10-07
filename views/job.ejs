@@ -4,7 +4,6 @@
             <%- include nav.ejs %>
             <h1 class="text-center mb-3"></h1>
             <% include ./partials/messages %>
-            <%= bookmarks[0] %>
             <% if (user._id == jobAd.postedByUserID) { %>
             <div class="col-md-12 m-auto border border-secondary rounded-sm mt-4 p-3">
                 <p><em><i>You posted this job advertisement</i></em></p>
@@ -27,9 +26,15 @@
                                                         href="/editJob?jobId=<%= jobAd._id %>"><i
                                                             class="far fa-edit"></i></a></h4></li>
                                     <% } %>
-                                    <li class="list-inline-item" title="Bookmark Job Ad"><h4><a
-                                                    href="/bookmarkJob?jobId=<%= jobAd._id %>"><i
-                                                        class="far fa-bookmark"></i></a></h4></li>
+                                    <% if (jobAd.activeBookmark) { %>
+                                        <li class="list-inline-item" title="Remove Bookmark"><h4>
+                                                <a href="/bookmarkJob?jobId=<%= jobAd._id %>">
+                                                    <i class="fas fa-bookmark"></i></a></h4></li>
+                                    <% } else { %>
+                                        <li class="list-inline-item" title="Bookmark Job Ad"><h4>
+                                                <a href="/bookmarkJob?jobId=<%= jobAd._id %>">
+                                                    <i class="far fa-bookmark"></i></a></h4></li>
+                                    <% } %>
                                 </ul>
                             <% } %>
                             <% if (user.userType === 'student') { %>
@@ -37,9 +42,15 @@
                                     <li class="list-inline-item" title="Register Your Interest"><h4><a
                                                     href="/registerInterest?jobId=<%= jobAd._id %>"><i
                                                         class="fas fa-file-import"></i></a></h4></li>
-                                    <li class="list-inline-item" title="Bookmark Job Ad"><h4><a
-                                                    href="/bookmarkJob?jobId=<%= jobAd._id %>"><i
-                                                        class="far fa-bookmark"></i></a></h4></li>
+                                    <% if (jobAd.activeBookmark) { %>
+                                        <li class="list-inline-item" title="Remove Bookmark"><h4>
+                                                <a href="/bookmarkJob?jobId=<%= jobAd._id %>">
+                                                    <i class="fas fa-bookmark"></i></a></h4></li>
+                                    <% } else { %>
+                                        <li class="list-inline-item" title="Bookmark Job Ad"><h4>
+                                                <a href="/bookmarkJob?jobId=<%= jobAd._id %>">
+                                                    <i class="far fa-bookmark"></i></a></h4></li>
+                                    <% } %>
                                 </ul>
                             <% } %>
                             <% if (user.userType === 'lecturer') { %>
@@ -55,9 +66,15 @@
                                                         href="/editJob?jobId=<%= jobAd._id %>"><i
                                                             class="far fa-edit"></i></a></h4></li>
                                     <% } %>
-                                    <li class="list-inline-item" title="Bookmark Job Ad"><h4><a
-                                                    href="/bookmarkJob?jobId=<%= jobAd._id %>"><i
-                                                        class="far fa-bookmark"></i></a></h4></li>
+                                    <% if (jobAd.activeBookmark) { %>
+                                        <li class="list-inline-item" title="Remove Bookmark"><h4>
+                                                <a href="/bookmarkJob?jobId=<%= jobAd._id %>">
+                                                    <i class="fas fa-bookmark"></i></a></h4></li>
+                                    <% } else { %>
+                                        <li class="list-inline-item" title="Bookmark Job Ad"><h4>
+                                                <a href="/bookmarkJob?jobId=<%= jobAd._id %>">
+                                                    <i class="far fa-bookmark"></i></a></h4></li>
+                                    <% } %>
                                 </ul>
                             <% } %>
                         </div>
