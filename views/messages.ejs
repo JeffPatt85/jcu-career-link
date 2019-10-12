@@ -49,53 +49,153 @@
         <div class="card card-body">
             <%- include nav.ejs %>
             <h1 class="text-center mb-3">Messages</h1>
-
-            <p>
-            <h1>Your messages</h1>
             <% include ./partials/messages.ejs %>
+            <% let sentMessages = []%>
+            <% let notes= []%>
+            <% let receivedMessages = []%>
+            <% for (var k=0; k<userMessages.length; k++){%>
+
+            <%if(userMessages[k].sender == userMessages[k].recipient){%>
+                <% notes.push(userMessages[k])%>
+            <%}else if(userMessages[k].sender == user.email){%>
+                <% sentMessages.push(userMessages[k])%>
+            <%}else{%>
+            <%receivedMessages.push(userMessages[k])%>
+            <%}}%>
+            <p>
+            <h1>Sent Messages</h1>
             <table>
                 <tr>
-                    <th>From</th>
+                    <th>To</th>
                     <th>Date</th>
                     <th>Message</th>
                 </tr>
-                <% for(var i=0; i<userMessages.length; i++){ %>
+
+                <% for(var i=0; i<sentMessages.length; i++){ %>
                     <tr>
-                        <% if(!userMessages[i].isRead){ %>
-                            <th class="unread-message"><%= userMessages[i].sender%></th>
-                            <th class="unread-message"><%= userMessages[i].sentDate%></th>
-                            <th class="unread-message"><%= userMessages[i].content%></th>
+                        <% if(!sentMessages[i].isRead){ %>
+                            <th class="unread-message"><%= sentMessages[i].recipient%></th>
+                            <th class="unread-message"><%= sentMessages[i].sentDate%></th>
+                            <th class="unread-message"><%= sentMessages[i].content%></th>
                             <%}else{%>
-                                <th class="read-message"><%= userMessages[i].sender%></th>
-                                <th class="read-message"><%= userMessages[i].sentDate%></th>
-                                <th class="read-message"><%= userMessages[i].content%></th>
+                                <th class="read-message"><%= sentMessages[i].recipient%></th>
+                                <th class="read-message"><%= sentMessages[i].sentDate%></th>
+                                <th class="read-message"><%= sentMessages[i].content%></th>
                                <%}%>
-                     <% if(!userMessages[i].isRead){ %>
+                     <% if(!sentMessages[i].isRead){ %>
                             <th class="mark-as-read-button">
                                 <form action="/messageManager/markMessageRead" method="post">
-                                    <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
+                                    <input type="hidden" id="messageId" name="messageId" value="<%= sentMessages[i]._id %>">
                                     <button>Mark as read</button>
                                 </form>
                             </th>
                             <% } %>
                             <th class="reply-button">
                                 <form action="/messageManager/sendNewMessage" method="post">
-                                    <input type="hidden" id="recipient" name="recipient" value="<%=userMessages[i].recipient%>">
+                                    <input type="hidden" id="recipient" name="recipient" value="<%=sentMessages[i].recipient%>">
                                 <button>Reply</button>
                                 </form>
                             </th>
                             <th class="delete-button">
                                 <form action="/messageManager/deleteMessage" method="post">
-                                    <input type="hidden" id="messageId" name="messageId" value="<%= userMessages[i]._id %>">
+                                    <input type="hidden" id="messageId" name="messageId" value="<%= sentMessages[i]._id %>">
                                     <button>Delete</button>
                                 </form>
                             </th>
                 </tr>
-                <% } %>
+                <% }%>
             </table>
             </p>
             <p>
+            <h1>Received Messages</h1>
+            <table>
+                <tr>
+                    <th>From</th>
+                    <th>Date</th>
+                    <th>Message</th>
+                </tr>
 
+                <% for(var a=0; a<receivedMessages.length; a++){ %>
+                    <tr>
+                        <% if(!receivedMessages[a].isRead){ %>
+                            <th class="unread-message"><%= receivedMessages[a].sender%></th>
+                            <th class="unread-message"><%= receivedMessages[a].sentDate%></th>
+                            <th class="unread-message"><%= receivedMessages[a].content%></th>
+                        <%}else{%>
+                            <th class="read-message"><%= receivedMessages[a].sender%></th>
+                            <th class="read-message"><%= receivedMessages[a].sentDate%></th>
+                            <th class="read-message"><%= receivedMessages[a].content%></th>
+                        <%}%>
+                        <% if(!receivedMessages[a].isRead){ %>
+                            <th class="mark-as-read-button">
+                                <form action="/messageManager/markMessageRead" method="post">
+                                    <input type="hidden" id="messageId" name="messageId" value="<%= receivedMessages[a]._id %>">
+                                    <button>Mark as read</button>
+                                </form>
+                            </th>
+                        <% } %>
+                        <th class="reply-button">
+                            <form action="/messageManager/sendNewMessage" method="post">
+                                <input type="hidden" id="recipient" name="recipient" value="<%=receivedMessages[a].recipient%>">
+                                <button>Reply</button>
+                            </form>
+                        </th>
+                        <th class="delete-button">
+                            <form action="/messageManager/deleteMessage" method="post">
+                                <input type="hidden" id="messageId" name="messageId" value="<%= receivedMessages[a]._id %>">
+                                <button>Delete</button>
+                            </form>
+                        </th>
+                    </tr>
+                <% }%>
+            </table>
+            </p>
+            <p>
+            <h1>My Notes</h1>
+            <table>
+                <tr>
+
+                    <th>Date</th>
+                    <th>Message</th>
+                </tr>
+
+                <% for(var b=0; b<notes.length; b++){ %>
+                    <tr>
+                        <% if(!notes[b].isRead){ %>
+
+                            <th class="unread-message"><%= notes[b].sentDate%></th>
+                            <th class="unread-message"><%= notes[b].content%></th>
+                        <%}else{%>
+
+                            <th class="read-message"><%= notes[b].sentDate%></th>
+                            <th class="read-message"><%= notes[b].content%></th>
+                        <%}%>
+                        <% if(!notes[b].isRead){ %>
+                            <th class="mark-as-read-button">
+                                <form action="/messageManager/markMessageRead" method="post">
+                                    <input type="hidden" id="messageId" name="messageId" value="<%= notes[b]._id %>">
+                                    <button>Mark as read</button>
+                                </form>
+                            </th>
+                        <% } %>
+                        <th class="reply-button">
+                            <form action="/messageManager/sendNewMessage" method="post">
+                                <input type="hidden" id="recipient" name="recipient" value="<%=notes[b].recipient%>">
+                                <button>Reply</button>
+                            </form>
+                        </th>
+                        <th class="delete-button">
+                            <form action="/messageManager/deleteMessage" method="post">
+                                <input type="hidden" id="messageId" name="messageId" value="<%= notes[b]._id %>">
+                                <button>Delete</button>
+                            </form>
+                        </th>
+                    </tr>
+                <% }%>
+            </table>
+            </p>
+
+            <p>
             <form action="/messageManager/sendNewMessage" method="post">
                 <button>Send a message</button>
             </form>
