@@ -7,7 +7,7 @@
 <div class="row mt-5">
     <div class="col-md-9 m-auto">
         <div class="card card-body">
-<!--            <%- include nav.ejs %>-->
+            <%- include nav.ejs %>
             <p>
             <h1>New Message</h1>
             <% include ./partials/messages.ejs %>
@@ -20,6 +20,7 @@
                 <br>
                 <button>Send message</button>
             </form>
+            <a href="/messageManager/messages">Return to messages</a>
             </p>
             <!--            <form action="/notificationManager/trigger" method="get">-->
             <!--                <button>Get a notification</button>-->

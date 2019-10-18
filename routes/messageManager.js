@@ -104,8 +104,8 @@ router.post('/sendMessage', ensureAuthenticated, (req, res) => {
     router.get('/messages', ensureAuthenticated, (req, res) => {
         console.log('Request made to open messages page');
         // console.log(req.user.email);
-        currentUser = req.user.email;
-        Message.find({ recipient : req.user.email}, (err,results) => {
+        let currentUser = req.user.email;
+        Message.find( { $or: [{ recipient: currentUser}, {sender : currentUser}]}, (err,results) => {
             if (err){
                 return console.log('Error has occurred: $(err)');
             } else {
